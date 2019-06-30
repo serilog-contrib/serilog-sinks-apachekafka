@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Sinks.Kafka", "src\Serilog.Sinks.Kafka\Serilog.Sinks.Kafka.csproj", "{F379C965-CE3E-477F-9B3D-E45B92448151}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F379C965-CE3E-477F-9B3D-E45B92448151}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F379C965-CE3E-477F-9B3D-E45B92448151}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F379C965-CE3E-477F-9B3D-E45B92448151}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F379C965-CE3E-477F-9B3D-E45B92448151}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

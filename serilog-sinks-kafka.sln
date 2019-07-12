@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Sinks.Kafka", "src\Serilog.Sinks.Kafka\Serilog.Sinks.Kafka.csproj", "{F379C965-CE3E-477F-9B3D-E45B92448151}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{706B7C20-1E7E-473E-9999-6787E707C1B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Sinks.Kafka.Tests", "tests\Serilog.Sinks.Kafka.Tests\Serilog.Sinks.Kafka.Tests.csproj", "{55FE61AC-82B8-483E-B010-F35A749C12F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,12 @@ Global
 		{F379C965-CE3E-477F-9B3D-E45B92448151}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F379C965-CE3E-477F-9B3D-E45B92448151}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F379C965-CE3E-477F-9B3D-E45B92448151}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55FE61AC-82B8-483E-B010-F35A749C12F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55FE61AC-82B8-483E-B010-F35A749C12F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55FE61AC-82B8-483E-B010-F35A749C12F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55FE61AC-82B8-483E-B010-F35A749C12F5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{55FE61AC-82B8-483E-B010-F35A749C12F5} = {706B7C20-1E7E-473E-9999-6787E707C1B4}
 	EndGlobalSection
 EndGlobal

@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Serilog.Events;
 using Serilog.Formatting;
@@ -17,14 +15,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
     {
         private ITextFormatter _formatter;
         private KafkaProducer _producer;
-        
-        public static KafkaSink Create(ITextFormatter formatter, KafkaOptions kafkaOptions, BatchOptions batchOptions)
-        {
-            return batchOptions.QueueLimit.HasValue
-                ? new KafkaSink(formatter, kafkaOptions, batchOptions)
-                : new KafkaSink(formatter, kafkaOptions, batchOptions.BatchSizeLimit, batchOptions.Period);
-        }
-        
+
         /// <remarks>
         ///     Used for calling base constructor for create NonBoundedConcurrentQueue (queueLimit equals -1)
         /// </remarks>
@@ -46,7 +37,14 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
         {
             Initialize(formatter, kafkaOptions);
         }
-        
+
+        public static KafkaSink Create(ITextFormatter formatter, KafkaOptions kafkaOptions, BatchOptions batchOptions)
+        {
+            return batchOptions.QueueLimit.HasValue
+                ? new KafkaSink(formatter, kafkaOptions, batchOptions)
+                : new KafkaSink(formatter, kafkaOptions, batchOptions.BatchSizeLimit, batchOptions.Period);
+        }
+
         private void Initialize(ITextFormatter formatter, KafkaOptions kafkaOptions)
         {
             _formatter = formatter;
@@ -64,7 +62,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
 //                    }
 //                });
         }
-        
+
         protected override Task EmitBatchAsync(IEnumerable<LogEvent> events)
         {
             return Task.WhenAll(events.Select(e =>
@@ -82,15 +80,12 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
                 }
             }));
         }
-        
+
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
 
-            if (disposing)
-            {
-                _producer?.Dispose();
-            }
+            if (disposing) _producer?.Dispose();
         }
     }
 }

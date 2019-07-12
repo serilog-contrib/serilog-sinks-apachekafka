@@ -12,7 +12,8 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
         {
         }
 
-        public KafkaFailoverSink(int batchSizeLimit, TimeSpan period, int queueLimit) : base(batchSizeLimit, period, queueLimit)
+        public KafkaFailoverSink(int batchSizeLimit, TimeSpan period, int queueLimit) : base(batchSizeLimit, period,
+            queueLimit)
         {
         }
 

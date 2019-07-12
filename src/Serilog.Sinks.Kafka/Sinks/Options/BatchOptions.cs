@@ -6,7 +6,7 @@ using System;
 
 namespace Serilog.Sinks.Kafka.Sinks.Options
 {
-   /// <summary>
+    /// <summary>
     ///     The options to configure periodic batching queue
     /// </summary>
     public class BatchOptions
@@ -53,10 +53,8 @@ namespace Serilog.Sinks.Kafka.Sinks.Options
             set
             {
                 if (value <= 0)
-                {
                     throw new ArgumentOutOfRangeException(nameof(value),
                         "The batch size limit must be more than 0");
-                }
 
                 _batchSizeLimit = value;
             }
@@ -72,10 +70,8 @@ namespace Serilog.Sinks.Kafka.Sinks.Options
             set
             {
                 if (value < TimeSpan.Zero)
-                {
                     throw new ArgumentOutOfRangeException(nameof(value),
                         "The batching period must be a non-negative timespan");
-                }
 
                 _period = value;
             }
@@ -92,10 +88,8 @@ namespace Serilog.Sinks.Kafka.Sinks.Options
             set
             {
                 if (value.HasValue && value.Value <= 0)
-                {
                     throw new ArgumentOutOfRangeException(nameof(value),
                         "The queue limit must be more than 0. Or equals NULL for non bounded queue");
-                }
 
                 _queueLimit = value;
             }

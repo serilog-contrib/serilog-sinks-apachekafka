@@ -60,16 +60,11 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka.Options
             get => _brokers;
             set
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                if (value == null) throw new ArgumentNullException(nameof(value));
 
                 if (value.Any(string.IsNullOrWhiteSpace))
-                {
                     throw new ArgumentException("The parameter must be specified with non-whitespace strings",
                         nameof(value));
-                }
 
                 _brokers = new List<string>(value);
             }
@@ -85,9 +80,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka.Options
             set
             {
                 if (string.IsNullOrWhiteSpace(value))
-                {
                     throw new ArgumentException("Value should not be null or whitespace", nameof(value));
-                }
 
                 _topicName = value;
             }

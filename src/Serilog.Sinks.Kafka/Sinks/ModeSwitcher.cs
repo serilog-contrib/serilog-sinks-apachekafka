@@ -1,5 +1,6 @@
 using System;
 using Confluent.Kafka;
+using Serilog.Debugging;
 
 namespace Serilog.Sinks.Kafka.Sinks
 {
@@ -12,9 +13,7 @@ namespace Serilog.Sinks.Kafka.Sinks
         public ModeSwitcher(TimeSpan fallbackTime)
         {
             if (fallbackTime <= TimeSpan.Zero)
-            {
                 throw new ArgumentOutOfRangeException(nameof(fallbackTime), "The parameter must be positive");
-            }
 
             _timeToSwitchToPrimary = DateTime.UtcNow;
             _fallbackTime = fallbackTime;
@@ -27,7 +26,7 @@ namespace Serilog.Sinks.Kafka.Sinks
                 if (_currentMode == Mode.Failover && _timeToSwitchToPrimary <= DateTime.UtcNow)
                 {
                     _currentMode = Mode.Primary;
-                    Debugging.SelfLog.WriteLine("Switched to primary.");
+                    SelfLog.WriteLine("Switched to primary.");
                 }
 
                 return _currentMode;
@@ -39,7 +38,7 @@ namespace Serilog.Sinks.Kafka.Sinks
             _currentMode = Mode.Failover;
             _timeToSwitchToPrimary = DateTime.UtcNow.Add(_fallbackTime);
 
-            Debugging.SelfLog.WriteLine("Switched to failover due to {0}. Exception: {1}.",
+            SelfLog.WriteLine("Switched to failover due to {0}. Exception: {1}.",
                 exceptionReason.Message, exceptionReason);
         }
 
@@ -48,7 +47,7 @@ namespace Serilog.Sinks.Kafka.Sinks
             _currentMode = Mode.Failover;
             _timeToSwitchToPrimary = DateTime.UtcNow.Add(_fallbackTime);
 
-            Debugging.SelfLog.WriteLine("Switched to failover due to {0}.", reason);
+            SelfLog.WriteLine("Switched to failover due to {0}.", reason);
         }
     }
 }

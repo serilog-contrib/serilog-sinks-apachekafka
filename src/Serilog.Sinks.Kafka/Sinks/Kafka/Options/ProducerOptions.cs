@@ -33,9 +33,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka.Options
             set
             {
                 if (value <= TimeSpan.Zero)
-                {
                     throw new ArgumentOutOfRangeException(nameof(value), "The argument must be positive");
-                }
 
                 _messageTimeout = value;
             }
@@ -51,9 +49,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka.Options
             set
             {
                 if (value <= TimeSpan.Zero)
-                {
                     throw new ArgumentOutOfRangeException(nameof(value), "The argument must be positive");
-                }
 
                 _retryAfter = value;
             }
@@ -70,9 +66,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka.Options
             set
             {
                 if (value < 0)
-                {
                     throw new ArgumentOutOfRangeException(nameof(value), "The argument must be non-negative");
-                }
 
                 _retryCount = value;
             }
@@ -87,10 +81,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka.Options
             get => _messageBatchSize;
             set
             {
-                if (value <= 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), "The argument must be positive");
-                }
+                if (value <= 0) throw new ArgumentOutOfRangeException(nameof(value), "The argument must be positive");
 
                 _messageBatchSize = value;
             }
@@ -105,10 +96,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka.Options
             get => _maxMessageInBufferingQueue;
             set
             {
-                if (value <= 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), "The argument must be positive");
-                }
+                if (value <= 0) throw new ArgumentOutOfRangeException(nameof(value), "The argument must be positive");
 
                 _maxMessageInBufferingQueue = value;
             }
@@ -123,9 +111,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka.Options
             set
             {
                 if (!Enum.IsDefined(typeof(CompressionType), value))
-                {
                     throw new ArgumentOutOfRangeException(nameof(value), "The argument must be defined enum value.");
-                }
 
                 _compressionType = value;
             }

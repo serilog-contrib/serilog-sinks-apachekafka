@@ -7,24 +7,19 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
 {
     internal sealed class KafkaProducer : IDisposable
     {
-        private IProducer<Null, string> Producer { get; }
-
         private readonly TimeSpan _timeout;
         private readonly string _topicName;
         private bool _disposed;
 
         public KafkaProducer(KafkaOptions options)
         {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
+            if (options == null) throw new ArgumentNullException(nameof(options));
 
             var brokers = string.Join(",", options.Brokers);
             _timeout = options.Producer.MessageTimeout;
             _topicName = options.TopicName;
             var producerOptions = options.Producer;
-            
+
             var config = new ProducerConfig
             {
                 BootstrapServers = brokers,
@@ -41,20 +36,19 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
 
                 LogConnectionClose = false,
 
-                CompressionType = producerOptions.CompressionType,
+                CompressionType = producerOptions.CompressionType
             };
-            
+
             Producer = new ProducerBuilder<Null, string>(config)
                 .SetErrorHandler((producer, error) => ProducerOnError(error))
                 .Build();
         }
 
+        private IProducer<Null, string> Producer { get; }
+
         public void Dispose()
         {
-            if (_disposed)
-            {
-                return;
-            }
+            if (_disposed) return;
 
             try
             {
@@ -69,7 +63,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
             }
             finally
             {
-                _disposed = true;  
+                _disposed = true;
             }
         }
 
@@ -81,11 +75,8 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
 
         public Task ProduceAsync(string message)
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(KafkaProducer));
-            }
-            
+            if (_disposed) throw new ObjectDisposedException(nameof(KafkaProducer));
+
             return Producer.ProduceAsync(_topicName, new Message<Null, string> {Value = message});
         }
 

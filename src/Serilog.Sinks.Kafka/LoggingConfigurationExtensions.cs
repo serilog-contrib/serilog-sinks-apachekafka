@@ -9,12 +9,10 @@ using Serilog.Sinks.Kafka.Sinks.Options;
 namespace Serilog.Sinks.Kafka
 {
     /// <summary>
-    /// 
     /// </summary>
     public static class LoggingConfigurationExtensions
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="sinkConfiguration"></param>
         /// <param name="formatter">Custom formatter.</param>

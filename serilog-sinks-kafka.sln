@@ -6,6 +6,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{706B7C20
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Sinks.Kafka.Tests", "tests\Serilog.Sinks.Kafka.Tests\Serilog.Sinks.Kafka.Tests.csproj", "{55FE61AC-82B8-483E-B010-F35A749C12F5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{B8A1014A-06C9-4FD7-9972-1E86131ED9AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Sinks.Kafka.Examples.NetCore.Console", "examples\Serilog.Sinks.Kafka.Examples.NetCore.Console\Serilog.Sinks.Kafka.Examples.NetCore.Console.csproj", "{464D4C1B-F088-431C-975A-058BA98A3460}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,8 +24,13 @@ Global
 		{55FE61AC-82B8-483E-B010-F35A749C12F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55FE61AC-82B8-483E-B010-F35A749C12F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55FE61AC-82B8-483E-B010-F35A749C12F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{464D4C1B-F088-431C-975A-058BA98A3460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{464D4C1B-F088-431C-975A-058BA98A3460}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{464D4C1B-F088-431C-975A-058BA98A3460}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{464D4C1B-F088-431C-975A-058BA98A3460}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{55FE61AC-82B8-483E-B010-F35A749C12F5} = {706B7C20-1E7E-473E-9999-6787E707C1B4}
+		{464D4C1B-F088-431C-975A-058BA98A3460} = {B8A1014A-06C9-4FD7-9972-1E86131ED9AA}
 	EndGlobalSection
 EndGlobal

@@ -2,9 +2,8 @@
 using Serilog.Configuration;
 using Serilog.Core;
 using Serilog.Formatting;
+using Serilog.Sinks.Kafka.Options;
 using Serilog.Sinks.Kafka.Sinks.Kafka;
-using Serilog.Sinks.Kafka.Sinks.Kafka.Options;
-using Serilog.Sinks.Kafka.Sinks.Options;
 
 namespace Serilog.Sinks.Kafka
 {

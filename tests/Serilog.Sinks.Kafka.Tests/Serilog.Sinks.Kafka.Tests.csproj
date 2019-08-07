@@ -16,4 +16,8 @@
       <ProjectReference Include="..\..\src\Serilog.Sinks.Kafka\Serilog.Sinks.Kafka.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Sinks\Kafka" />
+    </ItemGroup>
+
 </Project>

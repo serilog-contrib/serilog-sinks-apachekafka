@@ -5,8 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Serilog.Events;
 using Serilog.Formatting;
-using Serilog.Sinks.Kafka.Sinks.Kafka.Options;
-using Serilog.Sinks.Kafka.Sinks.Options;
+using Serilog.Sinks.Kafka.Options;
 using Serilog.Sinks.PeriodicBatching;
 
 namespace Serilog.Sinks.Kafka.Sinks.Kafka
@@ -65,6 +64,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
 
         protected override Task EmitBatchAsync(IEnumerable<LogEvent> events)
         {
+            //todo: add limitation
             return Task.WhenAll(events.Select(e =>
             {
 //                using (var writerHolder = _stringWriterPool.Get())

@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Confluent.Kafka;
-using Serilog.Sinks.Kafka.Sinks.Kafka.Options;
+using Serilog.Sinks.Kafka.Options;
 
 namespace Serilog.Sinks.Kafka.Sinks.Kafka
 {

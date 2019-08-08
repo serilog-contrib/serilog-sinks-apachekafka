@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Serilog.Debugging;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.Kafka.Options;
+
+[assembly: ExcludeFromCodeCoverage]
 
 namespace Serilog.Sinks.Kafka.Examples.NetCore.Console
 {

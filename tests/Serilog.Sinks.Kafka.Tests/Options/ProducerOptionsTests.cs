@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Confluent.Kafka;
 using Serilog.Sinks.Kafka.Options;
 using Xunit;
 
 namespace Serilog.Sinks.Kafka.Tests.Options
 {
+    [ExcludeFromCodeCoverage]
     public class ProducerOptionsTests
     {
         public static IEnumerable<object[]> TimeSpanTestData

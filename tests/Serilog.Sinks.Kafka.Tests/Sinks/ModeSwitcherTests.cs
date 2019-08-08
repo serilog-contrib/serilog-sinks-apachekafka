@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+using Confluent.Kafka;
 using Serilog.Sinks.Kafka.Sinks;
 using Xunit;
 
@@ -18,8 +20,23 @@ namespace Serilog.Sinks.Kafka.Tests.Sinks
                 new ModeSwitcher(TimeSpan.Zero.Subtract(TimeSpan.FromMinutes(1))));
         }
 
-        [Fact]
-        public void CurrentMode_ShouldSwitchMode_AfterFallbackTime()
+        public static IEnumerable<object[]> CurrentModeTestData
+        {
+            get
+            {
+                yield return new object[]
+                    {new Action<ModeSwitcher>(switcher => switcher.SwitchToFailover(new Exception()))};
+                yield return new object[]
+                {
+                    new Action<ModeSwitcher>(switcher =>
+                        switcher.SwitchToFailover(new Error(ErrorCode.NetworkException)))
+                };
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(CurrentModeTestData))]
+        internal void CurrentMode_ShouldSwitchModeToPrimary_AfterFallbackTime(Action<ModeSwitcher> action)
         {
             // Arrange
             var fallbackTime = TimeSpan.FromSeconds(5);
@@ -27,7 +44,7 @@ namespace Serilog.Sinks.Kafka.Tests.Sinks
             var switcher = new ModeSwitcher(fallbackTime);
 
             // Act
-            switcher.SwitchToFailover(new Exception());
+            action.Invoke(switcher);
 
             // Assert
             Assert.Equal(Mode.Failover, switcher.CurrentMode);

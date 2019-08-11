@@ -28,3 +28,5 @@ steps:
   inputs:
     command: pack
     arguments: '--configuration $(buildConfiguration)'
+    nobuild: true
+- task: PublishBuildArtifacts@1

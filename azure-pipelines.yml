@@ -30,3 +30,6 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
     nobuild: true
 - task: PublishBuildArtifacts@1
+  displayName: Publish build artifacts to Azure Pipelines
+  inputs:
+    artifactName: 'packages'

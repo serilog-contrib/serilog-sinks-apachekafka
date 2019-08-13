@@ -30,6 +30,7 @@ steps:
   inputs:
     command: test
     arguments: '--configuration $(buildConfiguration)'
+    nobuild: true
 
 - task: DotNetCoreCLI@2
   displayName: Pack

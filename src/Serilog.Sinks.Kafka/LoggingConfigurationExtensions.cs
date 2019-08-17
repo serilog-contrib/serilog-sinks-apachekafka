@@ -43,11 +43,18 @@ namespace Serilog.Sinks.Kafka
                 throw new ArgumentOutOfRangeException(nameof(fallback), "The fallback time must be positive");
 
             var kafkaSink = KafkaSink.Create(formatter, kafka, batch);
-
-            //todo: temporarily
-            return sinkConfiguration.Sink(kafkaSink);
+            return sinkConfiguration.Sink(KafkaFailoverSink.Create(kafkaSink, failoverSink, batch));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sinkConfiguration"></param>
+        /// <param name="formatter"></param>
+        /// <param name="kafka"></param>
+        /// <param name="batch"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static LoggerConfiguration Kafka(this LoggerSinkConfiguration sinkConfiguration,
             ITextFormatter formatter, KafkaOptions kafka, BatchOptions batch)
         {

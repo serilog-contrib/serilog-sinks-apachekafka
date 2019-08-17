@@ -62,6 +62,8 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
 //                });
         }
 
+        public Task LogEntriesAsync(IEnumerable<LogEvent> events) => EmitBatchAsync(events);
+
         protected override Task EmitBatchAsync(IEnumerable<LogEvent> events)
         {
             //todo: add limitation

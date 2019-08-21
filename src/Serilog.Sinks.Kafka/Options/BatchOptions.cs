@@ -79,7 +79,7 @@ namespace Serilog.Sinks.Kafka.Options
 
         /// <summary>
         ///     Maximum number of events in the queue.
-        ///     null for unbounded queue.
+        ///     <code>Null</code> for unbounded queue.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="value" />not null and negative or zero</exception>
         public int? QueueLimit

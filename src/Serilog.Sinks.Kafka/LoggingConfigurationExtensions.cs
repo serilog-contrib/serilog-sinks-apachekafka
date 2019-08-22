@@ -24,20 +24,15 @@ namespace Serilog.Sinks.Kafka
             ITextFormatter formatter, KafkaOptions kafka, BatchOptions batch, ILogEventSink failoverSink,
             TimeSpan fallback)
         {
-            if (sinkConfiguration == null)
-                throw new ArgumentNullException(nameof(sinkConfiguration));
+            if (sinkConfiguration == null) throw new ArgumentNullException(nameof(sinkConfiguration));
 
-            if (formatter == null)
-                throw new ArgumentNullException(nameof(formatter));
+            if (formatter == null) throw new ArgumentNullException(nameof(formatter));
 
-            if (kafka == null)
-                throw new ArgumentNullException(nameof(kafka));
+            if (kafka == null) throw new ArgumentNullException(nameof(kafka));
 
-            if (batch == null)
-                throw new ArgumentNullException(nameof(batch));
+            if (batch == null) throw new ArgumentNullException(nameof(batch));
 
-            if (failoverSink == null)
-                throw new ArgumentNullException(nameof(failoverSink));
+            if (failoverSink == null) throw new ArgumentNullException(nameof(failoverSink));
 
             if (fallback <= TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(fallback), "The fallback time must be positive");
@@ -47,7 +42,6 @@ namespace Serilog.Sinks.Kafka
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="sinkConfiguration"></param>
         /// <param name="formatter"></param>
@@ -58,17 +52,13 @@ namespace Serilog.Sinks.Kafka
         public static LoggerConfiguration Kafka(this LoggerSinkConfiguration sinkConfiguration,
             ITextFormatter formatter, KafkaOptions kafka, BatchOptions batch)
         {
-            if (sinkConfiguration == null)
-                throw new ArgumentNullException(nameof(sinkConfiguration));
+            if (sinkConfiguration == null) throw new ArgumentNullException(nameof(sinkConfiguration));
 
-            if (formatter == null)
-                throw new ArgumentNullException(nameof(formatter));
+            if (formatter == null) throw new ArgumentNullException(nameof(formatter));
 
-            if (kafka == null)
-                throw new ArgumentNullException(nameof(kafka));
+            if (kafka == null) throw new ArgumentNullException(nameof(kafka));
 
-            if (batch == null)
-                throw new ArgumentNullException(nameof(batch));
+            if (batch == null) throw new ArgumentNullException(nameof(batch));
 
             var kafkaSink = KafkaSink.Create(formatter, kafka, batch);
 

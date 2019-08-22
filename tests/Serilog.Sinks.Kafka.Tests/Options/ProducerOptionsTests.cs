@@ -27,14 +27,14 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         {
             // Arrange
             var options = new ProducerOptions();
-            
+
             // Act
             options.MessageTimeout = value;
 
             // Assert
             Assert.Equal(value, options.MessageTimeout);
         }
-        
+
         [Theory]
         [ClassData(typeof(NonPositiveTimeSpanTestData))]
         public void RetryAfter_ShouldThrowException_WhenValueIsNotPositive(TimeSpan value)
@@ -52,14 +52,14 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         {
             // Arrange
             var options = new ProducerOptions();
-            
+
             // Act
             options.RetryAfter = value;
-            
+
             // Arrange
             Assert.Equal(value, options.RetryAfter);
         }
-        
+
         [Theory]
         [InlineData(-1)]
         public void RetryCount_ShouldThrowException_WhenValueIsNegative(int value)
@@ -87,14 +87,14 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         {
             // Arrange
             var options = new ProducerOptions();
-            
+
             // Act
             options.RetryCount = value;
 
             // Assert
             Assert.Equal(value, options.RetryCount);
         }
-        
+
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
@@ -122,7 +122,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         {
             // Arrange
             var options = new ProducerOptions();
-            
+
             // Act
             options.MessageBatchSize = value;
 
@@ -157,14 +157,14 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         {
             // Arrange
             var options = new ProducerOptions();
-            
+
             // Act
             options.MaxMessagesInBufferingQueue = value;
 
             // Assert
             Assert.Equal(value, options.MaxMessagesInBufferingQueue);
         }
-        
+
         [Theory]
         [InlineData((CompressionType) 10)]
         public void CompressionType_ShouldThrowException_WhenValueIsNotDefineInEnum(CompressionType value)
@@ -175,7 +175,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
             // Act + Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => options.CompressionType = value);
         }
-        
+
         [Theory]
         [InlineData(CompressionType.Gzip)]
         [InlineData(CompressionType.Lz4)]
@@ -189,7 +189,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
 
             // Act
             options.CompressionType = value;
-            
+
             // Assert
             Assert.Equal(value, options.CompressionType);
         }

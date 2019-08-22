@@ -14,7 +14,7 @@ namespace Serilog.Sinks.Kafka.Tests.TestData
             {
                 TimeSpan.Zero
             };
-            
+
             yield return new object[]
             {
                 TimeSpan.FromTicks(1)

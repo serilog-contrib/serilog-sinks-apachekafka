@@ -19,22 +19,22 @@ namespace Serilog.Sinks.Kafka.Tests.TestData
             {
                 TimeSpan.Zero.Subtract(TimeSpan.FromTicks(1))
             };
-            
+
             yield return new object[]
             {
                 TimeSpan.Zero.Subtract(TimeSpan.FromMilliseconds(1))
             };
-            
+
             yield return new object[]
             {
                 TimeSpan.Zero.Subtract(TimeSpan.FromSeconds(1))
             };
-            
+
             yield return new object[]
             {
                 TimeSpan.Zero.Subtract(TimeSpan.FromMinutes(1))
             };
-            
+
             yield return new object[]
             {
                 TimeSpan.Zero.Subtract(TimeSpan.FromHours(1))

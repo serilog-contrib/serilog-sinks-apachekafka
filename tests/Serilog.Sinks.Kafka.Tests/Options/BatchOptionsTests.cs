@@ -36,14 +36,14 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         {
             // Arrange
             var options = new BatchOptions();
-            
+
             // Act
             options.BatchSizeLimit = value;
 
             // Assert
             Assert.Equal(value, options.BatchSizeLimit);
         }
-        
+
         [Theory]
         [ClassData(typeof(NegativeTimeSpanTestData))]
         public void PeriodSetter_ShouldThrowException_WhenValueIsNegative(TimeSpan value)
@@ -61,14 +61,14 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         {
             // Arrange
             var options = new BatchOptions();
-            
+
             // Act
             options.Period = value;
 
             // Assert
             Assert.Equal(value, options.Period);
         }
-        
+
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
@@ -97,7 +97,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         {
             // Arrange
             var options = new BatchOptions();
-            
+
             // Act
             options.QueueLimit = value;
 

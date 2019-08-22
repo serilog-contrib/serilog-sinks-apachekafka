@@ -8,7 +8,7 @@ using Serilog.Sinks.Kafka.Options;
 
 namespace Serilog.Sinks.Kafka.Examples.NetCore.Console
 {
-    class Program
+    internal class Program
     {
         private static void Main(string[] args)
         {
@@ -22,7 +22,7 @@ namespace Serilog.Sinks.Kafka.Examples.NetCore.Console
             Log.Information("Hello World!");
 
             SelfLog.Enable(message => System.Console.WriteLine(message));
-            
+
             Log.CloseAndFlush();
         }
     }

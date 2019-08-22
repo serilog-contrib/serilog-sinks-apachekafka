@@ -10,29 +10,9 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
 {
     internal class KafkaFailoverSink : PeriodicBatchingSink
     {
-        private readonly KafkaSink _kafkaSink;
         private readonly ILogEventSink _failoverSink;
+        private readonly KafkaSink _kafkaSink;
         private readonly IModeSwitcher _switcher;
-
-        internal static KafkaFailoverSink Create(KafkaSink kafkaSink, ILogEventSink failoverSink,
-            BatchOptions batchOptions, TimeSpan fallback, IModeSwitcher modeSwitcher)
-        {
-            return batchOptions.QueueLimit.HasValue
-                ? new KafkaFailoverSink(kafkaSink, failoverSink, batchOptions.BatchSizeLimit, batchOptions.Period,
-                    batchOptions.QueueLimit.Value, fallback)
-                : new KafkaFailoverSink(kafkaSink, failoverSink, batchOptions.BatchSizeLimit, batchOptions.Period,
-                    fallback);
-        }
-
-        internal static KafkaFailoverSink Create(KafkaSink kafkaSink, ILogEventSink failoverSink,
-            BatchOptions batchOptions, TimeSpan fallback)
-        {
-            return batchOptions.QueueLimit.HasValue
-                ? new KafkaFailoverSink(kafkaSink, failoverSink, batchOptions.BatchSizeLimit, batchOptions.Period,
-                    batchOptions.QueueLimit.Value, fallback)
-                : new KafkaFailoverSink(kafkaSink, failoverSink, batchOptions.BatchSizeLimit, batchOptions.Period,
-                    fallback);
-        }
 
         private KafkaFailoverSink(KafkaSink kafkaSink, ILogEventSink failoverSink, int batchSizeLimit,
             TimeSpan period, IModeSwitcher modeSwitcher) : base(batchSizeLimit, period)
@@ -62,14 +42,30 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
         {
         }
 
+        internal static KafkaFailoverSink Create(KafkaSink kafkaSink, ILogEventSink failoverSink,
+            BatchOptions batchOptions, IModeSwitcher modeSwitcher) =>
+            batchOptions.QueueLimit.HasValue
+                ? new KafkaFailoverSink(kafkaSink, failoverSink, batchOptions.BatchSizeLimit, batchOptions.Period,
+                    batchOptions.QueueLimit.Value, modeSwitcher)
+                : new KafkaFailoverSink(kafkaSink, failoverSink, batchOptions.BatchSizeLimit, batchOptions.Period,
+                    modeSwitcher);
+
+        internal static KafkaFailoverSink Create(KafkaSink kafkaSink, ILogEventSink failoverSink,
+            BatchOptions batchOptions, TimeSpan fallback) =>
+            batchOptions.QueueLimit.HasValue
+                ? new KafkaFailoverSink(kafkaSink, failoverSink, batchOptions.BatchSizeLimit, batchOptions.Period,
+                    batchOptions.QueueLimit.Value, fallback)
+                : new KafkaFailoverSink(kafkaSink, failoverSink, batchOptions.BatchSizeLimit, batchOptions.Period,
+                    fallback);
+
+        // Need only for tests to don't wait timer
+        internal Task EmitBatchImmediatelyAsync(IEnumerable<LogEvent> events) => EmitBatchAsync(events);
+
         protected override async Task EmitBatchAsync(IEnumerable<LogEvent> events)
         {
             if (_switcher.CurrentMode == Mode.Failover)
             {
-                foreach (var logEvent in events)
-                {
-                    _failoverSink.Emit(logEvent);
-                }
+                foreach (var logEvent in events) _failoverSink.Emit(logEvent);
 
                 return;
             }
@@ -82,10 +78,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
             {
                 _switcher.SwitchToFailover(ex);
 
-                foreach (var logEvent in events)
-                {
-                    _failoverSink.Emit(logEvent);
-                }
+                foreach (var logEvent in events) _failoverSink.Emit(logEvent);
             }
         }
     }

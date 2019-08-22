@@ -15,6 +15,12 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
         private ITextFormatter _formatter;
         private KafkaProducer _producer;
 
+        // used for mock purposes only
+        [Obsolete("Must not be used directly")]
+        internal KafkaSink() : base(0, TimeSpan.Zero)
+        {
+        }
+
         /// <remarks>
         ///     Used for calling base constructor for create NonBoundedConcurrentQueue (queueLimit equals -1)
         /// </remarks>
@@ -37,12 +43,11 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
             Initialize(formatter, kafkaOptions);
         }
 
-        public static KafkaSink Create(ITextFormatter formatter, KafkaOptions kafkaOptions, BatchOptions batchOptions)
-        {
-            return batchOptions.QueueLimit.HasValue
+        public static KafkaSink Create(ITextFormatter formatter, KafkaOptions kafkaOptions,
+            BatchOptions batchOptions) =>
+            batchOptions.QueueLimit.HasValue
                 ? new KafkaSink(formatter, kafkaOptions, batchOptions)
                 : new KafkaSink(formatter, kafkaOptions, batchOptions.BatchSizeLimit, batchOptions.Period);
-        }
 
         private void Initialize(ITextFormatter formatter, KafkaOptions kafkaOptions)
         {
@@ -61,6 +66,8 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
 //                    }
 //                });
         }
+
+        public Task LogEntriesAsync(IEnumerable<LogEvent> events) => EmitBatchAsync(events);
 
         protected override Task EmitBatchAsync(IEnumerable<LogEvent> events)
         {

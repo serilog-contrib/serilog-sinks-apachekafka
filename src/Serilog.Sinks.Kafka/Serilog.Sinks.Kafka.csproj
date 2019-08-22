@@ -2,8 +2,14 @@
 
     <PropertyGroup>
         <TargetFrameworks>net461;netstandard2.0;netstandard2.1</TargetFrameworks>
-        
         <IsPackable>true</IsPackable>
+        <PackageId>Serilog.Sinks.ApacheKafka</PackageId>
+        <PackageTags>serilog;kafka;apache</PackageTags>
+        <PackageIconUrl>http://serilog.net/images/serilog-sink-nuget.png</PackageIconUrl>
+        <PackageProjectUrl>https://github.com/vhatsura/serilog-sinks-kafka</PackageProjectUrl>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/vhatsura/serilog-sinks-kafka</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
     </PropertyGroup>
 
     <ItemGroup>

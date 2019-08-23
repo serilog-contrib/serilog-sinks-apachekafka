@@ -1,4 +1,5 @@
 mode: Mainline
+increment: None
 branches:
   master:
     tag: beta

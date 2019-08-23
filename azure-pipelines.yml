@@ -1,8 +1,3 @@
-# ASP.NET Core
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
 trigger:
 - master
 
@@ -26,6 +21,15 @@ steps:
     includePreviewVersions: true
     version: '3.0.x'
 
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'SonarCloud vhatsura'
+    organization: 'vhatsura'
+    scannerMode: 'MSBuild'
+    projectKey: 'serilog-sinks-kafka'
+    projectName: 'serilog-sinks-kafka'
+    projectVersion: '$(AssemblyVersion)'
+
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
@@ -39,6 +43,11 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
     nobuild: true
 
+- task: SonarCloudAnalyze@1
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
 - task: DotNetCoreCLI@2
   displayName: Pack
   inputs:

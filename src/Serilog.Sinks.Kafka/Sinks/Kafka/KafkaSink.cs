@@ -12,13 +12,20 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
 {
     internal class KafkaSink : PeriodicBatchingSink
     {
-        private ITextFormatter _formatter;
-        private KafkaProducer _producer;
+        private readonly ITextFormatter _formatter;
+        private readonly IKafkaProducer _producer;
 
         // used for mock purposes only
-        [Obsolete("Must not be used directly")]
+        [Obsolete("Must not be used directly. Only for mock purposes in unit tests")]
         internal KafkaSink() : base(0, TimeSpan.Zero)
         {
+        }
+
+        [Obsolete("Must not be used directly. Only for benchmarks")]
+        internal KafkaSink(ITextFormatter formatter, IKafkaProducer producer) : base(0, TimeSpan.Zero)
+        {
+            _formatter = formatter;
+            _producer = producer;
         }
 
         /// <remarks>
@@ -27,34 +34,19 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
         private KafkaSink(ITextFormatter formatter, KafkaOptions kafkaOptions, int batchSizeLimit, TimeSpan period) :
             base(batchSizeLimit, period)
         {
-            Initialize(formatter, kafkaOptions);
+            _formatter = formatter;
+            _producer = new KafkaProducer(kafkaOptions);
         }
 
         /// <remarks>
         ///     Used for calling base constructor for create BoundedConcurrentQueue
         /// </remarks>
-        private KafkaSink(ITextFormatter formatter, KafkaOptions kafkaOptions, BatchOptions batchOptions) :
-            base(
-                batchOptions.BatchSizeLimit,
-                batchOptions.Period,
-                batchOptions.QueueLimit ?? throw new ArgumentOutOfRangeException(nameof(batchOptions.QueueLimit),
-                    $"QueueLimit cannot be null when calling this {nameof(KafkaSink)} constructor"))
-        {
-            Initialize(formatter, kafkaOptions);
-        }
-
-        public static KafkaSink Create(ITextFormatter formatter, KafkaOptions kafkaOptions,
-            BatchOptions batchOptions) =>
-            batchOptions.QueueLimit.HasValue
-                ? new KafkaSink(formatter, kafkaOptions, batchOptions)
-                : new KafkaSink(formatter, kafkaOptions, batchOptions.BatchSizeLimit, batchOptions.Period);
-
-        private void Initialize(ITextFormatter formatter, KafkaOptions kafkaOptions)
+        private KafkaSink(ITextFormatter formatter, KafkaOptions kafkaOptions, int batchSizeLimit, TimeSpan period,
+            int queueLimit) : base(batchSizeLimit, period, queueLimit)
         {
             _formatter = formatter;
             _producer = new KafkaProducer(kafkaOptions);
-
-//            _stringWriterPool = new ObjectPool<StringWriter>(60,
+            //            _stringWriterPool = new ObjectPool<StringWriter>(60,
 //                () => new StringWriter(new StringBuilder(500), CultureInfo.InvariantCulture),
 //                writer =>
 //                {
@@ -66,6 +58,13 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
 //                    }
 //                });
         }
+
+        public static KafkaSink Create(ITextFormatter formatter, KafkaOptions kafkaOptions,
+            BatchOptions batchOptions) =>
+            batchOptions.QueueLimit.HasValue
+                ? new KafkaSink(formatter, kafkaOptions, batchOptions.BatchSizeLimit, batchOptions.Period,
+                    batchOptions.QueueLimit.Value)
+                : new KafkaSink(formatter, kafkaOptions, batchOptions.BatchSizeLimit, batchOptions.Period);
 
         public Task LogEntriesAsync(IEnumerable<LogEvent> events) => EmitBatchAsync(events);
 

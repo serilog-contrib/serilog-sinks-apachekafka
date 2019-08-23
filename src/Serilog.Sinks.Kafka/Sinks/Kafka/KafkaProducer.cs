@@ -5,7 +5,7 @@ using Serilog.Sinks.Kafka.Options;
 
 namespace Serilog.Sinks.Kafka.Sinks.Kafka
 {
-    internal sealed class KafkaProducer : IDisposable
+    internal sealed class KafkaProducer : IKafkaProducer, IDisposable
     {
         private readonly TimeSpan _timeout;
         private readonly string _topicName;
@@ -80,6 +80,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
             return Producer.ProduceAsync(_topicName, new Message<Null, string> {Value = message});
         }
 
+        // todo: call during sink dispose 
         public void Flush()
         {
             Producer.Flush(_timeout);

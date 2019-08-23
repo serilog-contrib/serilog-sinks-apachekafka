@@ -46,6 +46,7 @@ namespace Serilog.Sinks.Kafka.Options
         ///     Constructs <see cref="KafkaOptions" />.
         /// </summary>
         /// <remarks>This constructor is used during deserialization from configuration file</remarks>
+        [Obsolete("Must not be used directly")]
         public KafkaOptions()
         {
         }

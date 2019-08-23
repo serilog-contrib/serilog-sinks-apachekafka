@@ -12,7 +12,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void BatchSizeLimitSetter_ShouldThrowException_WhenValueIsNonPositive(int value)
+        public void BatchSizeLimitSetter_ShouldThrowsException_WhenValueIsNonPositive(int value)
         {
             // Arrange
             var options = new BatchOptions();
@@ -32,7 +32,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         [InlineData(10_000_000)]
         [InlineData(100_000_000)]
         [InlineData(1_000_000_000)]
-        public void BatchSizeLimitSetter_ShouldNotThrowException_WhenValueIsPositive(int value)
+        public void BatchSizeLimitSetter_ShouldNotThrowsException_WhenValueIsPositive(int value)
         {
             // Arrange
             var options = new BatchOptions();
@@ -46,7 +46,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
 
         [Theory]
         [ClassData(typeof(NegativeTimeSpanTestData))]
-        public void PeriodSetter_ShouldThrowException_WhenValueIsNegative(TimeSpan value)
+        public void PeriodSetter_ShouldThrowsException_WhenValueIsNegative(TimeSpan value)
         {
             // Arrange
             var options = new BatchOptions();
@@ -57,7 +57,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
 
         [Theory]
         [ClassData(typeof(NonNegativeTimeSpanTestData))]
-        public void PeriodSetter_ShouldNotThrowException_WhenValueIsNotNegative(TimeSpan value)
+        public void PeriodSetter_ShouldNotThrowsException_WhenValueIsNotNegative(TimeSpan value)
         {
             // Arrange
             var options = new BatchOptions();
@@ -72,7 +72,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void QueueLimitSetter_ShouldThrowException_WhenValueIsNonPositive(int value)
+        public void QueueLimitSetter_ShouldThrowsException_WhenValueIsNonPositive(int value)
         {
             // Arrange
             var options = new BatchOptions();
@@ -93,7 +93,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         [InlineData(10_000_000)]
         [InlineData(100_000_000)]
         [InlineData(1_000_000_000)]
-        public void QueueLimitSetter_ShouldNotThrowException_WhenValueIsPositive(int? value)
+        public void QueueLimitSetter_ShouldNotThrowsException_WhenValueIsPositive(int? value)
         {
             // Arrange
             var options = new BatchOptions();

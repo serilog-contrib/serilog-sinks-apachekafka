@@ -14,15 +14,26 @@ namespace Serilog.Sinks.Kafka
         /// <summary>
         /// </summary>
         /// <param name="sinkConfiguration"></param>
+        /// <param name="formatter"></param>
+        /// <param name="kafka"></param>
+        /// <param name="failover"></param>
+        /// <returns></returns>
+        public static LoggerConfiguration Kafka(this LoggerSinkConfiguration sinkConfiguration,
+            ITextFormatter formatter, KafkaOptions kafka, ILogEventSink failover, TimeSpan fallback)
+            => sinkConfiguration.Kafka(formatter, kafka, new BatchOptions(), failover, fallback);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sinkConfiguration"></param>
         /// <param name="formatter">Custom formatter.</param>
         /// <param name="kafka"></param>
         /// <param name="batch"></param>
-        /// <param name="fallback"></param>
-        /// <param name="failoverSink"></param>
+        /// <param name="fallbackTime"></param>
+        /// <param name="failover"></param>
         /// <returns></returns>
         public static LoggerConfiguration Kafka(this LoggerSinkConfiguration sinkConfiguration,
-            ITextFormatter formatter, KafkaOptions kafka, BatchOptions batch, ILogEventSink failoverSink,
-            TimeSpan fallback)
+            ITextFormatter formatter, KafkaOptions kafka, BatchOptions batch, ILogEventSink failover,
+            TimeSpan fallbackTime)
         {
             if (sinkConfiguration == null) throw new ArgumentNullException(nameof(sinkConfiguration));
 
@@ -32,14 +43,24 @@ namespace Serilog.Sinks.Kafka
 
             if (batch == null) throw new ArgumentNullException(nameof(batch));
 
-            if (failoverSink == null) throw new ArgumentNullException(nameof(failoverSink));
+            if (failover == null) throw new ArgumentNullException(nameof(failover));
 
-            if (fallback <= TimeSpan.Zero)
-                throw new ArgumentOutOfRangeException(nameof(fallback), "The fallback time must be positive");
+            if (fallbackTime <= TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException(nameof(fallbackTime), "The fallback time must be positive");
 
             var kafkaSink = KafkaSink.Create(formatter, kafka, batch);
-            return sinkConfiguration.Sink(KafkaFailoverSink.Create(kafkaSink, failoverSink, batch, fallback));
+            return sinkConfiguration.Sink(KafkaFailoverSink.Create(kafkaSink, failover, batch, fallbackTime));
         }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sinkConfiguration"></param>
+        /// <param name="formatter"></param>
+        /// <param name="kafka"></param>
+        /// <returns></returns>
+        public static LoggerConfiguration Kafka(this LoggerSinkConfiguration sinkConfiguration,
+            ITextFormatter formatter, KafkaOptions kafka)
+            => sinkConfiguration.Kafka(formatter, kafka, new BatchOptions());
 
         /// <summary>
         /// </summary>

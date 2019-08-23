@@ -5,6 +5,7 @@
         <TargetFrameworks Condition=" '$(OS)' == 'WINDOWS_NT' ">net461;netcoreapp2.2;netcoreapp3.0</TargetFrameworks>
 
         <IsPackable>false</IsPackable>
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>

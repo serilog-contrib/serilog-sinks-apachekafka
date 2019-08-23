@@ -12,7 +12,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
     {
         [Theory]
         [ClassData(typeof(NonPositiveTimeSpanTestData))]
-        public void MessageTimeoutSetter_ShouldThrowException_WhenValueIsNotPositive(TimeSpan value)
+        public void MessageTimeoutSetter_ShouldThrowsException_WhenValueIsNotPositive(TimeSpan value)
         {
             // Arrange
             var options = new ProducerOptions();
@@ -23,7 +23,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
 
         [Theory]
         [ClassData(typeof(PositiveTimeSpanTestData))]
-        public void MessageTimeoutSetter_shouldNotThrowException_WhenValueIsPositive(TimeSpan value)
+        public void MessageTimeoutSetter_shouldNotThrowsException_WhenValueIsPositive(TimeSpan value)
         {
             // Arrange
             var options = new ProducerOptions();
@@ -37,7 +37,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
 
         [Theory]
         [ClassData(typeof(NonPositiveTimeSpanTestData))]
-        public void RetryAfter_ShouldThrowException_WhenValueIsNotPositive(TimeSpan value)
+        public void RetryAfter_ShouldThrowsException_WhenValueIsNotPositive(TimeSpan value)
         {
             // Arrange
             var options = new ProducerOptions();
@@ -48,7 +48,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
 
         [Theory]
         [ClassData(typeof(PositiveTimeSpanTestData))]
-        public void RetryAfter_ShouldNotThrowException_WhenValueIsPositive(TimeSpan value)
+        public void RetryAfter_ShouldNotThrowsException_WhenValueIsPositive(TimeSpan value)
         {
             // Arrange
             var options = new ProducerOptions();
@@ -62,7 +62,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
 
         [Theory]
         [InlineData(-1)]
-        public void RetryCount_ShouldThrowException_WhenValueIsNegative(int value)
+        public void RetryCount_ShouldThrowsException_WhenValueIsNegative(int value)
         {
             // Arrange
             var options = new ProducerOptions();
@@ -83,7 +83,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         [InlineData(10_000_000)]
         [InlineData(100_000_000)]
         [InlineData(1_000_000_000)]
-        public void RetryCount_ShouldNotThrowException_WhenValueIsPositive(int value)
+        public void RetryCount_ShouldNotThrowsException_WhenValueIsPositive(int value)
         {
             // Arrange
             var options = new ProducerOptions();
@@ -98,7 +98,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void MessageBatchSize_ShouldThrowException_WhenValueIsNotPositive(int value)
+        public void MessageBatchSize_ShouldThrowsException_WhenValueIsNotPositive(int value)
         {
             // Arrange
             var options = new ProducerOptions();
@@ -118,7 +118,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         [InlineData(10_000_000)]
         [InlineData(100_000_000)]
         [InlineData(1_000_000_000)]
-        public void MessageBatchSize_ShouldNotThrowException_WhenValueIsPositive(int value)
+        public void MessageBatchSize_ShouldNotThrowsException_WhenValueIsPositive(int value)
         {
             // Arrange
             var options = new ProducerOptions();
@@ -133,7 +133,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void MaxMessagesInBufferingQueue_ShouldThrowException_WhenValueIsNotPositive(int value)
+        public void MaxMessagesInBufferingQueue_ShouldThrowsException_WhenValueIsNotPositive(int value)
         {
             // Arrange
             var options = new ProducerOptions();
@@ -153,7 +153,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         [InlineData(10_000_000)]
         [InlineData(100_000_000)]
         [InlineData(1_000_000_000)]
-        public void MaxMessagesInBufferingQueue_ShouldNotThrowException_WhenValueIsPosistive(int value)
+        public void MaxMessagesInBufferingQueue_ShouldNotThrowsException_WhenValueIsPosistive(int value)
         {
             // Arrange
             var options = new ProducerOptions();
@@ -167,7 +167,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
 
         [Theory]
         [InlineData((CompressionType) 10)]
-        public void CompressionType_ShouldThrowException_WhenValueIsNotDefineInEnum(CompressionType value)
+        public void CompressionType_ShouldThrowsException_WhenValueIsNotDefineInEnum(CompressionType value)
         {
             // Arrange
             var options = new ProducerOptions();
@@ -182,7 +182,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         [InlineData(CompressionType.None)]
         [InlineData(CompressionType.Snappy)]
         [InlineData(CompressionType.Zstd)]
-        public void CompressionType_ShouldNotThrowException_WhenValueIsDefineInEnum(CompressionType value)
+        public void CompressionType_ShouldNotThrowsException_WhenValueIsDefineInEnum(CompressionType value)
         {
             // Arrange
             var options = new ProducerOptions();

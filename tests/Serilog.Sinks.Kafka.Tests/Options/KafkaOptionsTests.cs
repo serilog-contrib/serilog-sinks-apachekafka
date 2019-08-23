@@ -9,60 +9,40 @@ namespace Serilog.Sinks.Kafka.Tests.Options
     [ExcludeFromCodeCoverage]
     public class KafkaOptionsTests
     {
-        [Fact]
-        public void BrokersSetter_ShouldThrowsException_WhenValueIsNull()
+        private readonly KafkaOptions _options;
+        
+        public KafkaOptionsTests()
         {
-            // Arrange
-            var options = new KafkaOptions();
-
-            // Act + Assert
-            Assert.Throws<ArgumentNullException>(() => options.Brokers = null);
+            _options = new KafkaOptions(new List<string>{"broker"}, "topicName");    
         }
-
+        
         public static IEnumerable<object[]> BrokerTestData
         {
             get
             {
                 yield return new object[]
                 {
-                    new List<string>{ "broker", ""}
+                    new List<string> {"broker", ""}
                 };
-                
+
                 yield return new object[]
                 {
-                    new List<string>{ null, "broker"}
+                    new List<string> {null, "broker"}
                 };
-                
+
                 yield return new object[]
                 {
-                    new List<string>{"broker", " "}
+                    new List<string> {"broker", " "}
                 };
             }
         }
-        
+
         [Theory]
         [MemberData(nameof(BrokerTestData))]
         public void BrokersSetter_ShouldThrowsException_WhenAnyValueIsNullOrWhiteSpace(List<string> brokers)
         {
-            // Arrange
-            var options = new KafkaOptions();
-            
-            // Act + Assert
-            Assert.Throws<ArgumentException>(() => options.Brokers = brokers);
-        }
-
-        [Fact]
-        public void BrokersSetter_ShouldNotThrowsException_WhenAllValuesAreNotEmptyAndWhiteSpace()
-        {
-            // Arrange
-            var options = new KafkaOptions();
-            var brokers = new List<string> {"broker1", "broker2"};
-            
-            // Act
-            options.Brokers = brokers;
-            
-            // Assert
-            Assert.Equal(brokers, options.Brokers);
+            // Arrange + Act + Assert
+            Assert.Throws<ArgumentException>(() => _options.Brokers = brokers);
         }
 
         [Theory]
@@ -71,11 +51,45 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         [InlineData(" ")]
         public void TopicNameSetter_ShouldThrowsException_WhenValueIsNullOrWhiteSpace(string value)
         {
+            // Arrange + Act + Assert
+            Assert.Throws<ArgumentException>(() => _options.TopicName = value);
+        }
+
+        [Fact]
+        public void BrokersSetter_ShouldNotThrowsException_WhenAllValuesAreNotEmptyAndWhiteSpace()
+        {
             // Arrange
-            var options = new KafkaOptions();
-            
-            // Act + Assert
-            Assert.Throws<ArgumentException>(() => options.TopicName = value);
+            var brokers = new List<string> {"broker1", "broker2"};
+
+            // Act
+            _options.Brokers = brokers;
+
+            // Assert
+            Assert.Equal(brokers, _options.Brokers);
+        }
+
+        [Fact]
+        public void BrokersSetter_ShouldThrowsException_WhenValueIsNull()
+        {
+            // Arrange+ Act + Assert
+            Assert.Throws<ArgumentNullException>(() => _options.Brokers = null);
+        }
+
+        [Fact]
+        public void ProducerSetter_ShouldNotThrowsException_WhenValueIsNotNull()
+        {
+            // Arrange + Act
+            _options.Producer = new ProducerOptions();
+
+            // Assert
+            Assert.NotNull(_options.Producer);
+        }
+
+        [Fact]
+        public void ProducerSetter_ShouldThrowsException_WhenValueIsNull()
+        {
+            // Arrange + Act + Assert
+            Assert.Throws<ArgumentNullException>(() => _options.Producer = null);
         }
 
         [Fact]
@@ -83,36 +97,12 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         {
             // Arrange
             const string topicName = "topic";
-            var options = new KafkaOptions();
-            
-            // Act
-            options.TopicName = topicName;
-            
-            // Assert
-            Assert.Equal(topicName, options.TopicName);
-        }
 
-        [Fact]
-        public void ProducerSetter_ShouldThrowsException_WhenValueIsNull()
-        {
-            // Arrange
-            var options = new KafkaOptions();
-            
-            // Act + Assert
-            Assert.Throws<ArgumentNullException>(() => options.Producer = null);
-        }
-
-        [Fact]
-        public void ProducerSetter_ShouldNotThrowsException_WhenValueIsNotNull()
-        {
-            // Arrange
-            var options = new KafkaOptions();
-            
             // Act
-            options.Producer = new ProducerOptions();
-            
+            _options.TopicName = topicName;
+
             // Assert
-            Assert.NotNull(options.Producer);
+            Assert.Equal(topicName, _options.TopicName);
         }
     }
 }

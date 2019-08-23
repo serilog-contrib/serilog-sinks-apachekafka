@@ -1,4 +1,5 @@
 increment: None
+next-version: 1.0
 branches:
   master:
     tag: beta

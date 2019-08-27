@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFrameworks>net472;netcoreapp2.1;netcoreapp2.2;netcoreapp3.0</TargetFrameworks>
+        <TargetFrameworks>net472;netcoreapp2.0;netcoreapp2.1;netcoreapp2.2;netcoreapp3.0</TargetFrameworks>
         <IsPackable>false</IsPackable>
         <PlatformTarget>AnyCPU</PlatformTarget>
     </PropertyGroup>
@@ -13,6 +13,7 @@
 
     <ItemGroup>
       <PackageReference Include="BenchmarkDotNet" Version="0.11.5" />
+      <PackageReference Include="Bogus" Version="28.0.2" />
     </ItemGroup>
 
 </Project>

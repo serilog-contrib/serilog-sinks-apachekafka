@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Serilog.Events;
 using Serilog.Formatting;
@@ -14,6 +16,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
     {
         private readonly ITextFormatter _formatter;
         private readonly IKafkaProducer _producer;
+        private readonly ObjectPool<StringWriter> _stringWriterPool;
 
         // used for mock purposes only
         [Obsolete("Must not be used directly. Only for mock purposes in unit tests")]
@@ -26,6 +29,17 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
         {
             _formatter = formatter;
             _producer = producer;
+            _stringWriterPool = new ObjectPool<StringWriter>(60,
+                () => new StringWriter(new StringBuilder(500), CultureInfo.InvariantCulture),
+                writer =>
+                {
+                    var builder = writer.GetStringBuilder();
+                    builder.Length = 0;
+                    if (builder.Capacity > 5_000)
+                    {
+                        builder.Capacity = 5_000;
+                    }
+                });
         }
 
         /// <remarks>
@@ -36,6 +50,17 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
         {
             _formatter = formatter;
             _producer = new KafkaProducer(kafkaOptions);
+            _stringWriterPool = new ObjectPool<StringWriter>(60,
+                () => new StringWriter(new StringBuilder(500), CultureInfo.InvariantCulture),
+                writer =>
+                {
+                    var builder = writer.GetStringBuilder();
+                    builder.Length = 0;
+                    if (builder.Capacity > 5_000)
+                    {
+                        builder.Capacity = 5_000;
+                    }
+                });
         }
 
         /// <remarks>
@@ -46,17 +71,17 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
         {
             _formatter = formatter;
             _producer = new KafkaProducer(kafkaOptions);
-            //            _stringWriterPool = new ObjectPool<StringWriter>(60,
-//                () => new StringWriter(new StringBuilder(500), CultureInfo.InvariantCulture),
-//                writer =>
-//                {
-//                    var builder = writer.GetStringBuilder();
-//                    builder.Length = 0;
-//                    if (builder.Capacity > 5_000)
-//                    {
-//                        builder.Capacity = 5_000;
-//                    }
-//                });
+            _stringWriterPool = new ObjectPool<StringWriter>(60,
+                () => new StringWriter(new StringBuilder(500), CultureInfo.InvariantCulture),
+                writer =>
+                {
+                    var builder = writer.GetStringBuilder();
+                    builder.Length = 0;
+                    if (builder.Capacity > 5_000)
+                    {
+                        builder.Capacity = 5_000;
+                    }
+                });
         }
 
         public static KafkaSink Create(ITextFormatter formatter, KafkaOptions kafkaOptions,
@@ -73,16 +98,10 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
             //todo: add limitation
             return Task.WhenAll(events.Select(e =>
             {
-//                using (var writerHolder = _stringWriterPool.Get())
-//                {
-//                    _formatter.Format(e, writerHolder.Object);
-//                    return _producer.ProduceAsync(writerHolder.Object.ToString());
-//                }
-
-                using (var writer = new StringWriter())
+                using (var writerHolder = _stringWriterPool.Get())
                 {
-                    _formatter.Format(e, writer);
-                    return _producer.ProduceAsync(writer.ToString());
+                    _formatter.Format(e, writerHolder.Object);
+                    return _producer.ProduceAsync(writerHolder.Object.ToString());
                 }
             }));
         }

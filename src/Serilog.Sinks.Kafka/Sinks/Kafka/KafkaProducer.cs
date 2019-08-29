@@ -67,17 +67,17 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
             }
         }
 
-        private void ProducerOnError(Error error)
-        {
-            var errorHandler = OnError;
-            errorHandler?.Invoke(this, error);
-        }
-
         public Task ProduceAsync(string message)
         {
             if (_disposed) throw new ObjectDisposedException(nameof(KafkaProducer));
 
             return Producer.ProduceAsync(_topicName, new Message<Null, string> {Value = message});
+        }
+
+        private void ProducerOnError(Error error)
+        {
+            var errorHandler = OnError;
+            errorHandler?.Invoke(this, error);
         }
 
         // todo: call during sink dispose 

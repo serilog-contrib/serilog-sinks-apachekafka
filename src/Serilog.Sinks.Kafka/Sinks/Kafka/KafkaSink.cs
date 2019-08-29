@@ -35,10 +35,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
                 {
                     var builder = writer.GetStringBuilder();
                     builder.Length = 0;
-                    if (builder.Capacity > 5_000)
-                    {
-                        builder.Capacity = 5_000;
-                    }
+                    if (builder.Capacity > 5_000) builder.Capacity = 5_000;
                 });
         }
 
@@ -56,10 +53,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
                 {
                     var builder = writer.GetStringBuilder();
                     builder.Length = 0;
-                    if (builder.Capacity > 5_000)
-                    {
-                        builder.Capacity = 5_000;
-                    }
+                    if (builder.Capacity > 5_000) builder.Capacity = 5_000;
                 });
         }
 
@@ -77,10 +71,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
                 {
                     var builder = writer.GetStringBuilder();
                     builder.Length = 0;
-                    if (builder.Capacity > 5_000)
-                    {
-                        builder.Capacity = 5_000;
-                    }
+                    if (builder.Capacity > 5_000) builder.Capacity = 5_000;
                 });
         }
 

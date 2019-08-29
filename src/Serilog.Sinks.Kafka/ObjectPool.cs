@@ -17,10 +17,7 @@ namespace Serilog.Sinks.Kafka
             if (returnAction == null) throw new ArgumentNullException(nameof(returnAction));
 
             _objects = new T[amount];
-            for (var i = 0; i < amount; i++)
-            {
-                _objects[i] = valueFactory();
-            }
+            for (var i = 0; i < amount; i++) _objects[i] = valueFactory();
 
             _returnAction = returnAction;
         }
@@ -31,9 +28,8 @@ namespace Serilog.Sinks.Kafka
             T @object;
 
             do
-            {
                 index = Interlocked.Increment(ref _index) % _objects.Length;
-            } while ((@object = Interlocked.Exchange(ref _objects[index], null)) == null);
+            while ((@object = Interlocked.Exchange(ref _objects[index], null)) == null);
 
             return new ObjectHolder(this, @object, index);
         }

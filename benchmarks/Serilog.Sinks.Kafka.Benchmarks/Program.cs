@@ -17,10 +17,8 @@ namespace Serilog.Sinks.Kafka.Benchmarks
                 .With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp21))
                 .With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp22))
                 .With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp30))
-                .With(MemoryDiagnoser.Default)
-                //.With(HardwareCounter.TotalCycles)
-                ;
-            
+                .With(MemoryDiagnoser.Default);
+
             BenchmarkSwitcher
                 .FromAssembly(typeof(Program).Assembly)
                 .Run(args, config);

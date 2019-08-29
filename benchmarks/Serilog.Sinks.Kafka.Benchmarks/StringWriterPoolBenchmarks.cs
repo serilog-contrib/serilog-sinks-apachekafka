@@ -7,21 +7,21 @@ namespace Serilog.Sinks.Kafka.Benchmarks
 {
     public class StringWriterPoolBenchmarks
     {
-        private string[] _text;
-        private StringWriterPool _pool;
+        [Params(1, 10, 100, 1_000)]
+        private int _amount;
+
+        [Params(5000, 6000, 7000, 8000, 9000, 10000)]
+        private int _charactersLimit;
+
+        [Params(500, 1500, 2000, 2500)]
+        private int _initialCharactersAmonut;
 
         [Params(50, 100, 150, 200, 250, 300)]
         private int _messageAmount;
-        
-        [Params(1, 10, 100, 1_000)]
-        private int _amount;
-        
-        [Params(500, 1500, 2000, 2500)]
-        private int _initialCharactersAmonut;
-        
-        [Params(5000, 6000, 7000, 8000, 9000, 10000)]
-        private int _charactersLimit;
-        
+
+        private StringWriterPool _pool;
+        private string[] _text;
+
         [GlobalSetup]
         public void Setup()
         {

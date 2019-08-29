@@ -13,14 +13,13 @@ namespace Serilog.Sinks.Kafka.Benchmarks.Sinks
     [MemoryDiagnoser]
     public class KafkaSinkBenchmark
     {
-        private KafkaSink _sink;
-
         private LogEvent _event;
         private IList<LogEvent> _events;
+        private KafkaSink _sink;
 
         [Params(1, 10, 100, 1_000, 10_000)]
         public int N;
-        
+
         [GlobalSetup]
         public void Setup()
         {

@@ -5,7 +5,7 @@ using Serilog.Sinks.Kafka.Options;
 
 namespace Serilog.Sinks.Kafka.Sinks.Kafka
 {
-    internal sealed class KafkaProducer : IKafkaProducer, IDisposable
+    internal sealed class KafkaProducer : IKafkaProducer
     {
         private readonly TimeSpan _timeout;
         private readonly string _topicName;

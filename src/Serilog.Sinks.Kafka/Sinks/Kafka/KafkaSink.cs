@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Serilog.Events;
 using Serilog.Formatting;
@@ -25,11 +26,11 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
         }
 
         [Obsolete("Must not be used directly. Only for benchmarks")]
-        internal KafkaSink(ITextFormatter formatter, IKafkaProducer producer) : base(0, TimeSpan.Zero)
+        internal KafkaSink(ITextFormatter formatter, IKafkaProducer producer, StringWriterPoolOptions options) : base(0, TimeSpan.Zero)
         {
             _formatter = formatter;
             _producer = producer;
-            _stringWriterPool = new StringWriterPool(60, 500, 5_000);
+            _stringWriterPool = new StringWriterPool(options.Amount, 500, 5_000);
         }
 
         /// <remarks>
@@ -40,7 +41,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
         {
             _formatter = formatter;
             _producer = new KafkaProducer(kafkaOptions);
-            _stringWriterPool = new StringWriterPool(60, 500, 5_000);
+            _stringWriterPool = new StringWriterPool(10, 500, 5_000);
         }
 
         /// <remarks>
@@ -51,7 +52,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
         {
             _formatter = formatter;
             _producer = new KafkaProducer(kafkaOptions);
-            _stringWriterPool = new StringWriterPool(60, 500, 5_000);
+            _stringWriterPool = new StringWriterPool(10, 500, 5_000);
         }
 
         public static KafkaSink Create(ITextFormatter formatter, KafkaOptions kafkaOptions,
@@ -65,13 +66,22 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
 
         protected override Task EmitBatchAsync(IEnumerable<LogEvent> events)
         {
-            //todo: add limitation
-            return Task.WhenAll(events.Select(e =>
+            var semaphore = new SemaphoreSlim(Environment.ProcessorCount);
+            return Task.WhenAll(events.Select(async e =>
             {
-                using (var writerHolder = _stringWriterPool.Get())
+                await semaphore.WaitAsync();
+                
+                try
                 {
-                    _formatter.Format(e, writerHolder.Object);
-                    return _producer.ProduceAsync(writerHolder.Object.ToString());
+                    using (var writerHolder = _stringWriterPool.Get())
+                    {
+                        _formatter.Format(e, writerHolder.Object);
+                        await _producer.ProduceAsync(writerHolder.Object.ToString());
+                    }
+                }
+                finally
+                {
+                    semaphore.Release();
                 }
             }));
         }
@@ -80,7 +90,10 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
         {
             base.Dispose(disposing);
 
-            if (disposing) _producer?.Dispose();
+            if (!disposing || _producer == null) return;
+            
+            _producer.Flush();
+            _producer.Dispose();
         }
     }
 }

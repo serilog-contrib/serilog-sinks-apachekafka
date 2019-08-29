@@ -1,5 +1,4 @@
 ﻿using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Diagnosers;
 using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
@@ -13,11 +12,10 @@ namespace Serilog.Sinks.Kafka.Benchmarks
         {
             var config = DefaultConfig.Instance
                 .With(Job.Default.With(Runtime.Clr))
-                .With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp20))
-                .With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp21))
-                .With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp22))
-                .With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp30))
-                .With(MemoryDiagnoser.Default);
+                //.With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp20))
+                //.With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp21))
+                .With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp22));
+                //.With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp30))
 
             BenchmarkSwitcher
                 .FromAssembly(typeof(Program).Assembly)

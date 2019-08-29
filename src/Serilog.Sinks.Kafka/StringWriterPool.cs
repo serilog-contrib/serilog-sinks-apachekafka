@@ -6,6 +6,7 @@ namespace Serilog.Sinks.Kafka
 {
     internal class StringWriterPool : ObjectPool<StringWriter>
     {
+        // todo: add ability to configure such parameters
         internal StringWriterPool(int amount, int initialCharactersAmount, int charactersLimit)
             : base(amount,
                 () => new StringWriter(new StringBuilder(initialCharactersAmount), CultureInfo.InvariantCulture),

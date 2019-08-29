@@ -1,70 +1,83 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
-
 variables:
   buildConfiguration: 'Release'
+  NUGET_PACKAGES: $(Pipeline.Workspace)/.nuget/packages
 
-steps:
-- task: UseDotNet@2
-  displayName: Install .Net Core 2.2.x SDK
-  inputs:
-    packageType: sdk
-    version: '2.2.x'
+jobs:
 
-- task: UseDotNet@2
-  displayName: Install .Net Core 3.0.x-preview SDK
-  inputs:
-    packageType: sdk
-    includePreviewVersions: true
-    version: '3.0.x'
+- job: Build
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: sdk
+      version: '2.2.x'
+    displayName: Install .Net Core 2.2.x SDK
+    
+  - task: UseDotNet@2
+    inputs:
+      packageType: sdk
+      includePreviewVersions: true
+      version: '3.0.x'
+    displayName: Install .Net Core 3.0.x-preview SDK
 
-- task: SonarCloudPrepare@1
-  displayName: Prepare SonarCloud
-  inputs:
-    SonarCloud: 'SonarCloud vhatsura'
-    organization: 'vhatsura'
-    scannerMode: 'MSBuild'
-    projectKey: 'serilog-sinks-kafka'
-    projectName: 'serilog-sinks-kafka'
-    projectVersion: '$(AssemblyVersion)'
-    extraProperties: |
-      # Additional properties that will be passed to the scanner, 
-      # Put one key=value per line, example:
-      # sonar.exclusions=**/*.bin
-      sonar.cs.opencover.reportsPaths="**\coverage.opencover.xml"
+  - task: CacheBeta@0
+    inputs:
+      key: nuget
+      path: $(NUGET_PACKAGES)
+    displayName: Cache NuGet packages
 
-- task: DotNetCoreCLI@2
-  displayName: Build
-  inputs:
-    command: build
-    arguments: '--configuration $(buildConfiguration)'
+  - task: SonarCloudPrepare@1
+    displayName: Prepare SonarCloud
+    inputs:
+      SonarCloud: 'SonarCloud vhatsura'
+      organization: 'vhatsura'
+      scannerMode: 'MSBuild'
+      projectKey: 'serilog-sinks-kafka'
+      projectName: 'serilog-sinks-kafka'
+      extraProperties: |
+        # Additional properties that will be passed to the scanner, 
+        # Put one key=value per line, example:
+        # sonar.exclusions=**/*.bin
+        sonar.cs.opencover.reportsPaths="**\coverage.opencover.xml"
 
-- task: DotNetCoreCLI@2
-  displayName: Test
-  inputs:
-    command: test
-    arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover'
-    nobuild: true
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: build
+      arguments: '--configuration $(buildConfiguration)'
+    displayName: Build
 
-- task: SonarCloudAnalyze@1
-  displayName: Run Sonar Scanner
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: test
+      arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover'
+      nobuild: true
+    displayName: Run unit tests
 
-- task: SonarCloudPublish@1
-  displayName: Publish analyze artifacts to Sonar Cloud
-  inputs:
-    pollingTimeoutSec: '300'
+  - task: SonarCloudAnalyze@1
+    displayName: Run Sonar Scanner
 
-- task: DotNetCoreCLI@2
-  displayName: Pack
-  inputs:
-    command: pack
-    arguments: '--configuration $(buildConfiguration)'
-    nobuild: true
+  - task: SonarCloudPublish@1
+    inputs:
+      pollingTimeoutSec: '300'
+    displayName: Publish analyze artifacts to Sonar Cloud
+    
 
-- task: PublishBuildArtifacts@1
-  displayName: Publish build artifacts to Azure Pipelines
-  inputs:
-    artifactName: 'packages'
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: pack
+      arguments: '--configuration $(buildConfiguration) --include-symbols'
+      nobuild: true
+    displayName: Pack
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      artifactName: 'packages'
+    displayName: Publish build artifacts to Azure Pipelines
+
+- job: Integration
+  pool:
+    vmImage: 'ubuntu-latest'

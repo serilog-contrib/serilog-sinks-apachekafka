@@ -5,7 +5,7 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=serilog-sinks-kafka&metric=coverage)](https://sonarcloud.io/dashboard?id=serilog-sinks-kafka)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=serilog-sinks-kafka&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=serilog-sinks-kafka)
 
-A sink for Serilog that writes events to Kafka with failover functionality.
+A sink for [Serilog](https://serilog.net/) that writes events to [Kafka](https://kafka.apache.org/) with failover functionality.
 
 ## Installation
 

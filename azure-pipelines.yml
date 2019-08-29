@@ -3,6 +3,7 @@ trigger:
 
 variables:
   buildConfiguration: 'Release'
+  NUGET_PACKAGES: $(Pipeline.Workspace)/.nuget/packages
 
 jobs:
 
@@ -11,17 +12,23 @@ jobs:
     vmImage: 'ubuntu-latest'
   steps:
   - task: UseDotNet@2
-    displayName: Install .Net Core 2.2.x SDK
     inputs:
       packageType: sdk
       version: '2.2.x'
+    displayName: Install .Net Core 2.2.x SDK
     
   - task: UseDotNet@2
-    displayName: Install .Net Core 3.0.x-preview SDK
     inputs:
       packageType: sdk
       includePreviewVersions: true
       version: '3.0.x'
+    displayName: Install .Net Core 3.0.x-preview SDK
+
+  - task: CacheBeta@0
+    inputs:
+      key: nuget
+      path: $(NUGET_PACKAGES)
+    displayName: Cache NuGet packages
 
   - task: SonarCloudPrepare@1
     displayName: Prepare SonarCloud
@@ -38,41 +45,39 @@ jobs:
         sonar.cs.opencover.reportsPaths="**\coverage.opencover.xml"
 
   - task: DotNetCoreCLI@2
-    displayName: Build
     inputs:
       command: build
       arguments: '--configuration $(buildConfiguration)'
+    displayName: Build
 
   - task: DotNetCoreCLI@2
-    displayName: Test
     inputs:
       command: test
       arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover'
       nobuild: true
+    displayName: Run unit tests
 
   - task: SonarCloudAnalyze@1
     displayName: Run Sonar Scanner
 
   - task: SonarCloudPublish@1
-    displayName: Publish analyze artifacts to Sonar Cloud
     inputs:
       pollingTimeoutSec: '300'
+    displayName: Publish analyze artifacts to Sonar Cloud
+    
 
   - task: DotNetCoreCLI@2
-    displayName: Pack
     inputs:
       command: pack
       arguments: '--configuration $(buildConfiguration)'
-      nobuild: true 
+      nobuild: true
+    displayName: Pack
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      artifactName: 'packages'
+    displayName: Publish build artifacts to Azure Pipelines
 
 - job: Integration
   pool:
     vmImage: 'ubuntu-latest'
-
-- job: Publish
-  dependsOn: Build
-  steps:
-  - task: PublishBuildArtifacts@1
-    displayName: Publish build artifacts to Azure Pipelines
-    inputs:
-      artifactName: 'packages'

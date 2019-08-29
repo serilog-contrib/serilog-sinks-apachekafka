@@ -1,22 +1,22 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
-
 variables:
   buildConfiguration: 'Release'
 
 stages:
-- stage: Prepare Environment
+- stage: Build, analyze and run unit tests
+  pool:
+    vmImage: 'ubuntu-latest'
   jobs:
-  - job: Install .Net Core SDK
+  - job: Prepare Environment
     steps:
     - task: UseDotNet@2
       displayName: Install .Net Core 2.2.x SDK
       inputs:
         packageType: sdk
         version: '2.2.x'
+    
     - task: UseDotNet@2
       displayName: Install .Net Core 3.0.x-preview SDK
       inputs:
@@ -24,11 +24,6 @@ stages:
         includePreviewVersions: true
         version: '3.0.x'
 
-- stage: Build
-  dependsOn: Prepare Environment
-  jobs:
-  - job: Build
-    steps:
     - task: SonarCloudPrepare@1
       displayName: Prepare SonarCloud
       inputs:
@@ -72,8 +67,11 @@ stages:
         arguments: '--configuration $(buildConfiguration)'
         nobuild: true 
 
+- stage: Integration tests
+  dependsOn: Build, analyze and run unit tests
+    
 - stage: Publish
-  dependsOn: Build
+  dependsOn: Integration tests
   jobs:
   - job: Publish artifacts to Azure Pipelines
     steps:

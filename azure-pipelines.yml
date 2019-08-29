@@ -73,6 +73,6 @@ jobs:
   dependsOn: Build, analyze and run unit tests
   steps:
   - task: PublishBuildArtifacts@1
-      displayName: Publish build artifacts to Azure Pipelines
-      inputs:
-        artifactName: 'packages'
+    displayName: Publish build artifacts to Azure Pipelines
+    inputs:
+      artifactName: 'packages'

@@ -6,10 +6,10 @@ variables:
 
 stages:
 - stage: Build, analyze and run unit tests
-  pool:
-    vmImage: 'ubuntu-latest'
   jobs:
   - job: Prepare Environment
+    pool:
+      vmImage: 'ubuntu-latest'
     steps:
     - task: UseDotNet@2
       displayName: Install .Net Core 2.2.x SDK

@@ -31,7 +31,6 @@ jobs:
     displayName: Cache NuGet packages
 
   - task: SonarCloudPrepare@1
-    displayName: Prepare SonarCloud
     inputs:
       SonarCloud: 'SonarCloud vhatsura'
       organization: 'vhatsura'
@@ -43,6 +42,8 @@ jobs:
         # Put one key=value per line, example:
         # sonar.exclusions=**/*.bin
         sonar.cs.opencover.reportsPaths="**\coverage.opencover.xml"
+        sonar.exclusions=benchmarks/**/*
+    displayName: Prepare SonarCloud
 
   - task: DotNetCoreCLI@2
     inputs:

@@ -29,14 +29,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
         {
             _formatter = formatter;
             _producer = producer;
-            _stringWriterPool = new ObjectPool<StringWriter>(60,
-                () => new StringWriter(new StringBuilder(500), CultureInfo.InvariantCulture),
-                writer =>
-                {
-                    var builder = writer.GetStringBuilder();
-                    builder.Length = 0;
-                    if (builder.Capacity > 5_000) builder.Capacity = 5_000;
-                });
+            _stringWriterPool = new StringWriterPool(60, 500, 5_000);
         }
 
         /// <remarks>
@@ -47,14 +40,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
         {
             _formatter = formatter;
             _producer = new KafkaProducer(kafkaOptions);
-            _stringWriterPool = new ObjectPool<StringWriter>(60,
-                () => new StringWriter(new StringBuilder(500), CultureInfo.InvariantCulture),
-                writer =>
-                {
-                    var builder = writer.GetStringBuilder();
-                    builder.Length = 0;
-                    if (builder.Capacity > 5_000) builder.Capacity = 5_000;
-                });
+            _stringWriterPool = new StringWriterPool(60, 500, 5_000);
         }
 
         /// <remarks>
@@ -65,14 +51,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
         {
             _formatter = formatter;
             _producer = new KafkaProducer(kafkaOptions);
-            _stringWriterPool = new ObjectPool<StringWriter>(60,
-                () => new StringWriter(new StringBuilder(500), CultureInfo.InvariantCulture),
-                writer =>
-                {
-                    var builder = writer.GetStringBuilder();
-                    builder.Length = 0;
-                    if (builder.Capacity > 5_000) builder.Capacity = 5_000;
-                });
+            _stringWriterPool = new StringWriterPool(60, 500, 5_000);
         }
 
         public static KafkaSink Create(ITextFormatter formatter, KafkaOptions kafkaOptions,

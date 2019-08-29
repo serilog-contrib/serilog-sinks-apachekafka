@@ -6,7 +6,7 @@ variables:
 
 jobs:
 
-- job: Build, analyze and run unit tests
+- job: Build
   pool:
     vmImage: 'ubuntu-latest'
   steps:
@@ -65,12 +65,12 @@ jobs:
       arguments: '--configuration $(buildConfiguration)'
       nobuild: true 
 
-- job: Run integration tests  
+- job: Integration
   pool:
     vmImage: 'ubuntu-latest'
 
 - job: Publish
-  dependsOn: Build, analyze and run unit tests
+  dependsOn: Build
   steps:
   - task: PublishBuildArtifacts@1
     displayName: Publish build artifacts to Azure Pipelines

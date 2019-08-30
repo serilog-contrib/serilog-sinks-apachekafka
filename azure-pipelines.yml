@@ -116,6 +116,6 @@ jobs:
     displayName: Publish NuGet package to MyGet
     inputs:
       command: 'push'
-      packagesToPush: $(Pipeline.Workspace)/packages/*.nupkg
+      packagesToPush: $(Pipeline.Workspace)/Serilog.Sinks.ApacheKafka.*.nupkg
       nuGetFeedType: 'external'
       publishFeedCredentials: 'Serilog Sinks Kafka MyGet'

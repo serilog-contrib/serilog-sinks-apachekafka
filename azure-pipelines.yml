@@ -44,6 +44,8 @@ jobs:
         # sonar.exclusion need to be configured in SonarCloud UI
         # https://docs.sonarqube.org/latest/analysis/analysis-parameters/
         sonar.cs.opencover.reportsPaths="**\coverage.opencover.xml"
+        sonar.exlusions="benchmarks/**"
+        sonar.coverage.exclusions="benchmarks/**;examples/**"
     displayName: Prepare SonarCloud
 
   - task: DotNetCoreCLI@2

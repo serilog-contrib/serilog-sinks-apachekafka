@@ -8,13 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Serilog.Sinks.Kafka\Serilog.Sinks.Kafka.csproj"/>
+        <ProjectReference Include="..\..\src\Serilog.Sinks.Kafka\Serilog.Sinks.Kafka.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="BenchmarkDotNet" Version="0.11.5"/>
-        <PackageReference Include="Bogus" Version="28.0.2"/>
-        <PackageReference Condition=" '$(TargetFramework)' == 'net472' " Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.2" PrivateAssets="All"/>
+        <PackageReference Include="BenchmarkDotNet" Version="0.11.5" />
+        <PackageReference Include="Bogus" Version="28.0.3" />
+        <PackageReference Condition=" '$(TargetFramework)' == 'net472' " Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.2" PrivateAssets="All" />
     </ItemGroup>
 
 </Project>

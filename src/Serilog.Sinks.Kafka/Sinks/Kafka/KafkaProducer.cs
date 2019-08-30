@@ -80,7 +80,6 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
             errorHandler?.Invoke(this, error);
         }
 
-        // todo: call during sink dispose 
         public void Flush()
         {
             Producer.Flush(_timeout);

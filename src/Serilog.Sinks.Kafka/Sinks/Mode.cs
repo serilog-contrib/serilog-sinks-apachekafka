@@ -1,6 +1,6 @@
 namespace Serilog.Sinks.Kafka.Sinks
 {
-    public enum Mode
+    internal enum Mode
     {
         Primary,
         Failover

@@ -6,7 +6,6 @@ using Serilog.Configuration;
 using Serilog.Core;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.Kafka.Options;
-using Serilog.Sinks.Kafka.Sinks.Kafka;
 using Serilog.Sinks.Kafka.Tests.TestData;
 using Xunit;
 

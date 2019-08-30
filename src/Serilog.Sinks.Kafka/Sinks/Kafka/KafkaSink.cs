@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Serilog.Events;
 using Serilog.Formatting;
@@ -12,13 +15,22 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
 {
     internal class KafkaSink : PeriodicBatchingSink
     {
-        private ITextFormatter _formatter;
-        private KafkaProducer _producer;
+        private readonly ITextFormatter _formatter;
+        private readonly IKafkaProducer _producer;
+        private readonly ObjectPool<StringWriter> _stringWriterPool;
 
         // used for mock purposes only
-        [Obsolete("Must not be used directly")]
+        [Obsolete("Must not be used directly. Only for mock purposes in unit tests")]
         internal KafkaSink() : base(0, TimeSpan.Zero)
         {
+        }
+
+        [Obsolete("Must not be used directly. Only for benchmarks")]
+        internal KafkaSink(ITextFormatter formatter, IKafkaProducer producer, StringWriterPoolOptions options) : base(0, TimeSpan.Zero)
+        {
+            _formatter = formatter;
+            _producer = producer;
+            _stringWriterPool = new StringWriterPool(options.Amount, 500, 5_000);
         }
 
         /// <remarks>
@@ -27,63 +39,49 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
         private KafkaSink(ITextFormatter formatter, KafkaOptions kafkaOptions, int batchSizeLimit, TimeSpan period) :
             base(batchSizeLimit, period)
         {
-            Initialize(formatter, kafkaOptions);
+            _formatter = formatter;
+            _producer = new KafkaProducer(kafkaOptions);
+            _stringWriterPool = new StringWriterPool(10, 500, 5_000);
         }
 
         /// <remarks>
         ///     Used for calling base constructor for create BoundedConcurrentQueue
         /// </remarks>
-        private KafkaSink(ITextFormatter formatter, KafkaOptions kafkaOptions, BatchOptions batchOptions) :
-            base(
-                batchOptions.BatchSizeLimit,
-                batchOptions.Period,
-                batchOptions.QueueLimit ?? throw new ArgumentOutOfRangeException(nameof(batchOptions.QueueLimit),
-                    $"QueueLimit cannot be null when calling this {nameof(KafkaSink)} constructor"))
+        private KafkaSink(ITextFormatter formatter, KafkaOptions kafkaOptions, int batchSizeLimit, TimeSpan period,
+            int queueLimit) : base(batchSizeLimit, period, queueLimit)
         {
-            Initialize(formatter, kafkaOptions);
+            _formatter = formatter;
+            _producer = new KafkaProducer(kafkaOptions);
+            _stringWriterPool = new StringWriterPool(10, 500, 5_000);
         }
 
         public static KafkaSink Create(ITextFormatter formatter, KafkaOptions kafkaOptions,
             BatchOptions batchOptions) =>
             batchOptions.QueueLimit.HasValue
-                ? new KafkaSink(formatter, kafkaOptions, batchOptions)
+                ? new KafkaSink(formatter, kafkaOptions, batchOptions.BatchSizeLimit, batchOptions.Period,
+                    batchOptions.QueueLimit.Value)
                 : new KafkaSink(formatter, kafkaOptions, batchOptions.BatchSizeLimit, batchOptions.Period);
-
-        private void Initialize(ITextFormatter formatter, KafkaOptions kafkaOptions)
-        {
-            _formatter = formatter;
-            _producer = new KafkaProducer(kafkaOptions);
-
-//            _stringWriterPool = new ObjectPool<StringWriter>(60,
-//                () => new StringWriter(new StringBuilder(500), CultureInfo.InvariantCulture),
-//                writer =>
-//                {
-//                    var builder = writer.GetStringBuilder();
-//                    builder.Length = 0;
-//                    if (builder.Capacity > 5_000)
-//                    {
-//                        builder.Capacity = 5_000;
-//                    }
-//                });
-        }
 
         public Task LogEntriesAsync(IEnumerable<LogEvent> events) => EmitBatchAsync(events);
 
         protected override Task EmitBatchAsync(IEnumerable<LogEvent> events)
         {
-            //todo: add limitation
-            return Task.WhenAll(events.Select(e =>
+            var semaphore = new SemaphoreSlim(Environment.ProcessorCount);
+            return Task.WhenAll(events.Select(async e =>
             {
-//                using (var writerHolder = _stringWriterPool.Get())
-//                {
-//                    _formatter.Format(e, writerHolder.Object);
-//                    return _producer.ProduceAsync(writerHolder.Object.ToString());
-//                }
-
-                using (var writer = new StringWriter())
+                await semaphore.WaitAsync();
+                
+                try
                 {
-                    _formatter.Format(e, writer);
-                    return _producer.ProduceAsync(writer.ToString());
+                    using (var writerHolder = _stringWriterPool.Get())
+                    {
+                        _formatter.Format(e, writerHolder.Object);
+                        await _producer.ProduceAsync(writerHolder.Object.ToString());
+                    }
+                }
+                finally
+                {
+                    semaphore.Release();
                 }
             }));
         }
@@ -92,7 +90,10 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
         {
             base.Dispose(disposing);
 
-            if (disposing) _producer?.Dispose();
+            if (!disposing || _producer == null) return;
+            
+            _producer.Flush();
+            _producer.Dispose();
         }
     }
 }

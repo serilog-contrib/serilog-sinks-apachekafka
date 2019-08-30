@@ -9,13 +9,13 @@ namespace Serilog.Sinks.Kafka.Tests.Options
     [ExcludeFromCodeCoverage]
     public class KafkaOptionsTests
     {
-        private readonly KafkaOptions _options;
-        
         public KafkaOptionsTests()
         {
-            _options = new KafkaOptions(new List<string>{"broker"}, "topicName");    
+            _options = new KafkaOptions(new List<string> {"broker"}, "topicName");
         }
-        
+
+        private readonly KafkaOptions _options;
+
         public static IEnumerable<object[]> BrokerTestData
         {
             get

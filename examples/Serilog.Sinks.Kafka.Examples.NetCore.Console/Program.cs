@@ -8,7 +8,7 @@ using Serilog.Sinks.Kafka.Options;
 
 namespace Serilog.Sinks.Kafka.Examples.NetCore.Console
 {
-    internal class Program
+    internal static class Program
     {
         private static void Main(string[] args)
         {

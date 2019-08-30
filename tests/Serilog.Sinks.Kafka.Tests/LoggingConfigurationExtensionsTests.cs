@@ -22,11 +22,11 @@ namespace Serilog.Sinks.Kafka.Tests
             var sinkConfiguration = new LoggerConfiguration().WriteTo;
             var formatter = new JsonFormatter();
             var kafkaOptions = new KafkaOptions(new List<string> {"broker"}, "topicName");
-            var failover = Mock.Of<ILogEventSink>();
+            var fallbackSink = Mock.Of<ILogEventSink>();
 
             // Act + Assert
             Assert.Throws<ArgumentOutOfRangeException>("fallbackTime",
-                () => sinkConfiguration.Kafka(formatter, kafkaOptions, failover, value));
+                () => sinkConfiguration.Kafka(formatter, kafkaOptions, fallbackSink, value));
         }
 
         [Fact]
@@ -36,11 +36,11 @@ namespace Serilog.Sinks.Kafka.Tests
             var sinkConfiguration = new LoggerConfiguration().WriteTo;
             var formatter = new JsonFormatter();
             var kafkaOptions = new KafkaOptions(new List<string> {"broker"}, "topicName");
-            var failover = Mock.Of<ILogEventSink>();
+            var fallbackSink = Mock.Of<ILogEventSink>();
             var fallbackTime = TimeSpan.FromMinutes(1);
 
             // Act
-            var sink = sinkConfiguration.Kafka(formatter, kafkaOptions, failover, fallbackTime);
+            var sink = sinkConfiguration.Kafka(formatter, kafkaOptions, fallbackSink, fallbackTime);
 
             // Assert
             Assert.NotNull(sink);
@@ -60,7 +60,7 @@ namespace Serilog.Sinks.Kafka.Tests
         }
 
         [Fact]
-        public void KafkaWithFallback_ShouldThrowsException_WhenFailoverIsNull()
+        public void KafkaWithFallback_ShouldThrowsException_WhenFallbackIsNull()
         {
             // Arrange
             var sinkConfiguration = new LoggerConfiguration().WriteTo;
@@ -68,7 +68,7 @@ namespace Serilog.Sinks.Kafka.Tests
             var kafkaOptions = new KafkaOptions(new List<string> {"broker"}, "topicName");
 
             // Act + Assert
-            Assert.Throws<ArgumentNullException>("failover",
+            Assert.Throws<ArgumentNullException>("fallback",
                 () => sinkConfiguration.Kafka(formatter, kafkaOptions, null, TimeSpan.Zero));
         }
 

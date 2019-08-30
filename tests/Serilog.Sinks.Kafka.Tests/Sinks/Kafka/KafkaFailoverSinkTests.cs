@@ -20,10 +20,10 @@ namespace Serilog.Sinks.Kafka.Tests.Sinks.Kafka
         public KafkaFailoverSinkTests()
         {
             _kafkaSinkMock = new Mock<KafkaSink>();
-            _failoverMock = new Mock<ILogEventSink>();
+            _fallbackSinkMock = new Mock<ILogEventSink>();
             _modeSwitcherMock = new Mock<IModeSwitcher>();
 
-            _failoverSink = KafkaFailoverSink.Create(_kafkaSinkMock.Object, _failoverMock.Object, new BatchOptions(),
+            _failoverSink = KafkaFailoverSink.Create(_kafkaSinkMock.Object, _fallbackSinkMock.Object, new BatchOptions(),
                 _modeSwitcherMock.Object);
 
             _fixture = new Fixture();
@@ -33,7 +33,7 @@ namespace Serilog.Sinks.Kafka.Tests.Sinks.Kafka
         private readonly KafkaFailoverSink _failoverSink;
 
         private readonly Mock<KafkaSink> _kafkaSinkMock;
-        private readonly Mock<ILogEventSink> _failoverMock;
+        private readonly Mock<ILogEventSink> _fallbackSinkMock;
         private readonly Mock<IModeSwitcher> _modeSwitcherMock;
 
         private readonly Fixture _fixture;
@@ -54,7 +54,7 @@ namespace Serilog.Sinks.Kafka.Tests.Sinks.Kafka
             // Assert
             _kafkaSinkMock.Protected()
                 .Verify<Task>("EmitBatchAsync", Times.Once(), ItExpr.IsAny<IEnumerable<LogEvent>>());
-            _failoverMock.Verify(x => x.Emit(It.IsAny<LogEvent>()), Times.Exactly(10));
+            _fallbackSinkMock.Verify(x => x.Emit(It.IsAny<LogEvent>()), Times.Exactly(10));
         }
 
         [Fact]
@@ -65,7 +65,7 @@ namespace Serilog.Sinks.Kafka.Tests.Sinks.Kafka
             var logEvents = _fixture.CreateMany<LogEvent>(logEventCount);
 
             _modeSwitcherMock.Setup(x => x.CurrentMode)
-                .Returns(() => Mode.Failover);
+                .Returns(() => Mode.Fallback);
 
             // Act
             await _failoverSink.EmitBatchImmediatelyAsync(logEvents);
@@ -73,7 +73,7 @@ namespace Serilog.Sinks.Kafka.Tests.Sinks.Kafka
             // Assert
             _kafkaSinkMock.Protected()
                 .Verify<Task>("EmitBatchAsync", Times.Never(), ItExpr.IsAny<IEnumerable<LogEvent>>());
-            _failoverMock.Verify(x => x.Emit(It.IsAny<LogEvent>()), Times.Exactly(logEventCount));
+            _fallbackSinkMock.Verify(x => x.Emit(It.IsAny<LogEvent>()), Times.Exactly(logEventCount));
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace Serilog.Sinks.Kafka.Tests.Sinks.Kafka
             // Assert
             _kafkaSinkMock.Protected()
                 .Verify<Task>("EmitBatchAsync", Times.Once(), ItExpr.IsAny<IEnumerable<LogEvent>>());
-            _failoverMock.Verify(x => x.Emit(It.IsAny<LogEvent>()), Times.Never);
+            _fallbackSinkMock.Verify(x => x.Emit(It.IsAny<LogEvent>()), Times.Never);
         }
     }
 }

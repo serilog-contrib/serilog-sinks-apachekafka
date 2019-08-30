@@ -23,7 +23,7 @@ namespace Serilog.Sinks.Kafka.Sinks
         {
             get
             {
-                if (_currentMode == Mode.Failover && _timeToSwitchToPrimary <= DateTime.UtcNow)
+                if (_currentMode == Mode.Fallback && _timeToSwitchToPrimary <= DateTime.UtcNow)
                 {
                     _currentMode = Mode.Primary;
                     SelfLog.WriteLine("Switched to primary.");
@@ -33,21 +33,21 @@ namespace Serilog.Sinks.Kafka.Sinks
             }
         }
 
-        public void SwitchToFailover(Exception exceptionReason)
+        public void SwitchToFallback(Exception exceptionReason)
         {
-            _currentMode = Mode.Failover;
+            _currentMode = Mode.Fallback;
             _timeToSwitchToPrimary = DateTime.UtcNow.Add(_fallbackTime);
 
-            SelfLog.WriteLine("Switched to failover due to {0}. Exception: {1}.",
+            SelfLog.WriteLine("Switched to fallback due to {0}. Exception: {1}.",
                 exceptionReason.Message, exceptionReason);
         }
 
-        public void SwitchToFailover(Error reason)
+        public void SwitchToFallback(Error reason)
         {
-            _currentMode = Mode.Failover;
+            _currentMode = Mode.Fallback;
             _timeToSwitchToPrimary = DateTime.UtcNow.Add(_fallbackTime);
 
-            SelfLog.WriteLine("Switched to failover due to {0}.", reason);
+            SelfLog.WriteLine("Switched to fallback due to {0}.", reason);
         }
     }
 }

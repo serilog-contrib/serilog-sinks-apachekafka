@@ -16,11 +16,11 @@ namespace Serilog.Sinks.Kafka.Tests.Sinks
             get
             {
                 yield return new object[]
-                    {new Action<ModeSwitcher>(switcher => switcher.SwitchToFailover(new Exception()))};
+                    {new Action<ModeSwitcher>(switcher => switcher.SwitchToFallback(new Exception()))};
                 yield return new object[]
                 {
                     new Action<ModeSwitcher>(switcher =>
-                        switcher.SwitchToFailover(new Error(ErrorCode.NetworkException)))
+                        switcher.SwitchToFallback(new Error(ErrorCode.NetworkException)))
                 };
             }
         }
@@ -38,7 +38,7 @@ namespace Serilog.Sinks.Kafka.Tests.Sinks
             action.Invoke(switcher);
 
             // Assert
-            Assert.Equal(Mode.Failover, switcher.CurrentMode);
+            Assert.Equal(Mode.Fallback, switcher.CurrentMode);
             Thread.Sleep(fallbackTime.Add(TimeSpan.FromSeconds(1)));
             Assert.Equal(Mode.Primary, switcher.CurrentMode);
         }

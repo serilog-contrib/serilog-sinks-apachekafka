@@ -7,7 +7,7 @@ using Serilog.Sinks.Kafka.Sinks.Kafka;
 
 namespace Serilog.Sinks.Kafka
 {
-    /// <summary>Extends <see cref="LoggerSinkConfiguration" /> with methods to add file sinks.</summary>
+    /// <summary>Extends <see cref="LoggerSinkConfiguration" /> with methods to add kafka sink.</summary>
     public static class LoggingConfigurationExtensions
     {
         /// <summary>

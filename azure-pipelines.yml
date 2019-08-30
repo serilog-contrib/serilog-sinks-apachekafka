@@ -101,6 +101,10 @@ jobs:
       version: '2.2.x'
     displayName: Install .Net Core 2.2.x SDK
 
+  - task: NuGetToolInstaller@0
+    inputs:
+      versionSpec: '>=4.9.0'
+
   - task: DownloadPipelineArtifact@2
     inputs:
       artifact: packages
@@ -112,8 +116,6 @@ jobs:
     displayName: Publish NuGet package to MyGet
     inputs:
       command: 'push'
-      packagesToPush: |
-        $(Pipeline.Workspace)/packages/*.nupkg
-        $(Pipeline.Workspace)/packages/*.snupkg
+      packagesToPush: $(Pipeline.Workspace)/packages/*.nupkg
       nuGetFeedType: 'external'
       publishFeedCredentials: 'Serilog Sinks Kafka MyGet'

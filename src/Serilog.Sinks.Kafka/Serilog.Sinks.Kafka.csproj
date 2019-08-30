@@ -2,22 +2,27 @@
 
     <PropertyGroup>
         <TargetFrameworks>net461;netstandard2.0;netstandard2.1</TargetFrameworks>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <IsPackable>true</IsPackable>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <Description>Serilog event sink that writes to Apache Kafka.</Description>
         <PackageId>Serilog.Sinks.ApacheKafka</PackageId>
-        <PackageTags>serilog;kafka;apache</PackageTags>
+        <Authors>Vadim Hatsura</Authors>
+        <PackageTags>serilog;logging;sink;kafka;apache</PackageTags>
         <PackageIconUrl>http://serilog.net/images/serilog-sink-nuget.png</PackageIconUrl>
         <PackageProjectUrl>https://github.com/vhatsura/serilog-sinks-kafka</PackageProjectUrl>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <RepositoryUrl>https://github.com/vhatsura/serilog-sinks-kafka</RepositoryUrl>
+        <RepositoryUrl>https://github.com/vhatsura/serilog-sinks-kafka.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Confluent.Kafka" Version="1.1.0" />
-        <PackageReference Include="GitVersionTask" Version="5.0.1" PrivateAssets="All" />
-        <PackageReference Condition=" '$(TargetFramework)' == 'net461' " Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.2" PrivateAssets="All" />
-        <PackageReference Include="Serilog" Version="2.8.0" />
-        <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="2.2.0" />
+        <PackageReference Include="Confluent.Kafka" Version="1.1.0"/>
+        <PackageReference Include="GitVersionTask" Version="5.0.1" PrivateAssets="All"/>
+        <PackageReference Condition=" '$(TargetFramework)' == 'net461' " Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-preview.2" PrivateAssets="All"/>
+        <PackageReference Include="Serilog" Version="2.8.0"/>
+        <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="2.2.0"/>
     </ItemGroup>
 
 </Project>

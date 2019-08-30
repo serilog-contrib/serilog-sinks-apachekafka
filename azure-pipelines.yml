@@ -41,8 +41,9 @@ jobs:
         # Additional properties that will be passed to the scanner, 
         # Put one key=value per line, example:
         # sonar.exclusions=**/*.bin
+        # sonar.exclusion need to be configured in SonarCloud UI
+        # https://docs.sonarqube.org/latest/analysis/analysis-parameters/
         sonar.cs.opencover.reportsPaths="**\coverage.opencover.xml"
-        sonar.exclusions=benchmarks/**/*
     displayName: Prepare SonarCloud
 
   - task: DotNetCoreCLI@2

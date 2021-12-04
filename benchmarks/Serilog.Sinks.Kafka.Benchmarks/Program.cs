@@ -13,12 +13,9 @@ namespace Serilog.Sinks.Kafka.Benchmarks
         {
             var config = DefaultConfig.Instance
                 .AddJob(Job.Default.WithRuntime(ClrRuntime.Net472))
-                //.With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp20))
-                //.With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp21))
                 .AddJob(Job.Default.WithRuntime(CoreRuntime.Core31))
                 .AddJob(Job.Default.WithRuntime(CoreRuntime.Core50))
                 .AddJob(Job.Default.WithRuntime(CoreRuntime.Core60));
-            //.With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp30))
 
             BenchmarkSwitcher
                 .FromAssembly(typeof(Program).Assembly)

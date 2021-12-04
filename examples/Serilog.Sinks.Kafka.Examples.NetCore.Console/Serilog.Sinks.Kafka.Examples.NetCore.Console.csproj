@@ -3,12 +3,12 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp3.1</TargetFramework>
-        
+
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Serilog.Sinks.Kafka\Serilog.Sinks.Kafka.csproj" />
+        <ProjectReference Include="..\..\src\Serilog.Sinks.Kafka\Serilog.Sinks.Kafka.csproj"/>
     </ItemGroup>
 
 </Project>

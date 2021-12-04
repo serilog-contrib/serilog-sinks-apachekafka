@@ -74,15 +74,15 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
             return Producer.ProduceAsync(_topicName, new Message<Null, string> { Value = message });
         }
 
+        public void Flush()
+        {
+            Producer.Flush(_timeout);
+        }
+
         private void ProducerOnError(Error error)
         {
             var errorHandler = OnError;
             errorHandler?.Invoke(this, error);
-        }
-
-        public void Flush()
-        {
-            Producer.Flush(_timeout);
         }
 
         public event EventHandler<Error> OnError;

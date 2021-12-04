@@ -14,7 +14,7 @@ namespace Serilog.Sinks.Kafka.Options
     public class KafkaOptions
     {
         private List<string> _brokers;
-        private ProducerOptions _producer = new ProducerOptions();
+        private ProducerOptions _producer = new();
 
         private string _topicName;
 

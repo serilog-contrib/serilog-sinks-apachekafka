@@ -2,8 +2,6 @@
 using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
-using BenchmarkDotNet.Toolchains.CsProj;
-using Microsoft.Diagnostics.Tracing.Analysis;
 
 namespace Serilog.Sinks.Kafka.Benchmarks
 {

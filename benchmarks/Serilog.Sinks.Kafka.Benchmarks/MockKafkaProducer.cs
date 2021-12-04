@@ -13,7 +13,6 @@ namespace Serilog.Sinks.Kafka.Benchmarks
 
         public void Flush()
         {
-
         }
 
         public void Dispose()

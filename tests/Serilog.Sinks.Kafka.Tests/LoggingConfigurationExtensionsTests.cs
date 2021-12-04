@@ -7,6 +7,7 @@ using Serilog.Core;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.Kafka.Options;
 using Serilog.Sinks.Kafka.Tests.TestData;
+using Serilog.Sinks.PeriodicBatching;
 using Xunit;
 
 namespace Serilog.Sinks.Kafka.Tests
@@ -110,10 +111,9 @@ namespace Serilog.Sinks.Kafka.Tests
             var sinkConfiguration = new LoggerConfiguration().WriteTo;
             var formatter = new JsonFormatter();
             var kafkaOptions = new KafkaOptions(new List<string> { "broker" }, "topicName");
-            var batchOptions = new BatchOptions();
 
             // Act
-            var sink = sinkConfiguration.Kafka(formatter, kafkaOptions, batchOptions);
+            var sink = sinkConfiguration.Kafka(formatter, kafkaOptions, new PeriodicBatchingSinkOptions());
 
             // Assert
             Assert.NotNull(sink);

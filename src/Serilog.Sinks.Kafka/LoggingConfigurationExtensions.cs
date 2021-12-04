@@ -4,6 +4,7 @@ using Serilog.Core;
 using Serilog.Formatting;
 using Serilog.Sinks.Kafka.Options;
 using Serilog.Sinks.Kafka.Sinks.Kafka;
+using Serilog.Sinks.PeriodicBatching;
 
 namespace Serilog.Sinks.Kafka
 {
@@ -23,7 +24,7 @@ namespace Serilog.Sinks.Kafka
         /// <returns>Configuration object allowing method chaining.</returns>
         public static LoggerConfiguration Kafka(this LoggerSinkConfiguration sinkConfiguration,
             ITextFormatter formatter, KafkaOptions kafka, ILogEventSink fallback, TimeSpan fallbackTime)
-            => sinkConfiguration.Kafka(formatter, kafka, new BatchOptions(), fallback, fallbackTime);
+            => sinkConfiguration.Kafka(formatter, kafka, new PeriodicBatchingSinkOptions(), fallback, fallbackTime);
 
         /// <summary>
         ///     Adds a Serilog sink that writes <see cref="Serilog.Events.LogEvent" /> to Apache Kafka using
@@ -38,7 +39,7 @@ namespace Serilog.Sinks.Kafka
         /// <param name="fallback">Fallback sink to write the log events when kafka is unavailable.</param>
         /// <returns>Configuration object allowing method chaining.</returns>
         public static LoggerConfiguration Kafka(this LoggerSinkConfiguration sinkConfiguration,
-            ITextFormatter formatter, KafkaOptions kafka, BatchOptions batch, ILogEventSink fallback,
+            ITextFormatter formatter, KafkaOptions kafka, PeriodicBatchingSinkOptions batch, ILogEventSink fallback,
             TimeSpan fallbackTime)
         {
             if (sinkConfiguration == null) throw new ArgumentNullException(nameof(sinkConfiguration));
@@ -54,8 +55,12 @@ namespace Serilog.Sinks.Kafka
             if (fallbackTime <= TimeSpan.Zero)
                 throw new ArgumentOutOfRangeException(nameof(fallbackTime), "The fallback time must be positive");
 
-            var kafkaSink = KafkaSink.Create(formatter, kafka, batch);
-            return sinkConfiguration.Sink(KafkaFailoverSink.Create(kafkaSink, fallback, batch, fallbackTime));
+            var kafkaSink = new KafkaSink(formatter, kafka);
+
+            var kafkaFailoverSink = new FailoverSink(kafkaSink, fallback, fallbackTime);
+            var batchingSink = new PeriodicBatchingSink(kafkaFailoverSink, batch);
+
+            return sinkConfiguration.Sink(batchingSink);
         }
 
         /// <summary>
@@ -68,7 +73,7 @@ namespace Serilog.Sinks.Kafka
         /// <returns>Configuration object allowing method chaining.</returns>
         public static LoggerConfiguration Kafka(this LoggerSinkConfiguration sinkConfiguration,
             ITextFormatter formatter, KafkaOptions kafka)
-            => sinkConfiguration.Kafka(formatter, kafka, new BatchOptions());
+            => sinkConfiguration.Kafka(formatter, kafka, new PeriodicBatchingSinkOptions());
 
         /// <summary>
         ///     Adds a Serilog sink that writes <see cref="Serilog.Events.LogEvent" /> to Apache Kafka using
@@ -80,7 +85,7 @@ namespace Serilog.Sinks.Kafka
         /// <param name="batch">Options to configure sink write log events in batches.</param>
         /// <returns>Configuration object allowing method chaining.</returns>
         public static LoggerConfiguration Kafka(this LoggerSinkConfiguration sinkConfiguration,
-            ITextFormatter formatter, KafkaOptions kafka, BatchOptions batch)
+            ITextFormatter formatter, KafkaOptions kafka, PeriodicBatchingSinkOptions batch)
         {
             if (sinkConfiguration == null) throw new ArgumentNullException(nameof(sinkConfiguration));
 
@@ -90,9 +95,11 @@ namespace Serilog.Sinks.Kafka
 
             if (batch == null) throw new ArgumentNullException(nameof(batch));
 
-            var kafkaSink = KafkaSink.Create(formatter, kafka, batch);
+            var kafkaSink = new KafkaSink(formatter, kafka);
 
-            return sinkConfiguration.Sink(kafkaSink);
+            var batchingSink = new PeriodicBatchingSink(kafkaSink, batch);
+
+            return sinkConfiguration.Sink(batchingSink);
         }
     }
 }

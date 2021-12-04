@@ -7,6 +7,9 @@ namespace Serilog.Sinks.Kafka.Benchmarks
 {
     public class StringWriterPoolBenchmarks
     {
+        private StringWriterPool _pool;
+        private string[] _text;
+
         [Params(1, 10)]
         public int Amount;
 
@@ -17,9 +20,6 @@ namespace Serilog.Sinks.Kafka.Benchmarks
 
         // [Params(50, 100, 150)]
         public int MessageAmount = 50;
-
-        private StringWriterPool _pool;
-        private string[] _text;
 
         [GlobalSetup]
         public void Setup()
@@ -36,10 +36,7 @@ namespace Serilog.Sinks.Kafka.Benchmarks
         {
             await Task.WhenAll(_text.Select(x =>
             {
-                using (var holder = _pool.Get())
-                {
-                    return holder.Object.WriteAsync(x);
-                }
+                using (var holder = _pool.Get()) return holder.Object.WriteAsync(x);
             }));
         }
     }

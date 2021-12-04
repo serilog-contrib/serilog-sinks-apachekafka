@@ -16,7 +16,7 @@ namespace Serilog.Sinks.Kafka.Tests.Sinks
             get
             {
                 yield return new object[]
-                    {new Action<ModeSwitcher>(switcher => switcher.SwitchToFallback(new Exception()))};
+                    { new Action<ModeSwitcher>(switcher => switcher.SwitchToFallback(new Exception())) };
                 yield return new object[]
                 {
                     new Action<ModeSwitcher>(switcher =>

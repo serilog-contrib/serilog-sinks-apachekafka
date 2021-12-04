@@ -17,16 +17,17 @@ namespace Serilog.Sinks.Kafka.Benchmarks.Sinks
         private IList<LogEvent> _events;
         private KafkaSink _sink;
 
-        //[Params(1, 50, 500)]
-        public int N = 50;
-
         [Params(1, 10)]
         public int Amount;
+
+        //[Params(1, 50, 500)]
+        public int N = 50;
 
         [GlobalSetup]
         public void Setup()
         {
-            _sink = new KafkaSink(new JsonFormatter(), new MockKafkaProducer(), new StringWriterPoolOptions { Amount = Amount });
+            _sink = new KafkaSink(new JsonFormatter(), new MockKafkaProducer(),
+                new StringWriterPoolOptions { Amount = Amount });
 
             _events = Enumerable.Range(0, N)
                 .Select(x => new LogEvent(DateTimeOffset.UtcNow, LogEventLevel.Information, null,

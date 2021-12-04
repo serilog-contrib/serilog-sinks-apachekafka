@@ -5,6 +5,7 @@
 
         <IsPackable>false</IsPackable>
         <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+        <Nullable>disable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>

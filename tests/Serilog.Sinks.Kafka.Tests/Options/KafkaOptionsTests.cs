@@ -9,12 +9,12 @@ namespace Serilog.Sinks.Kafka.Tests.Options
     [ExcludeFromCodeCoverage]
     public class KafkaOptionsTests
     {
+        private readonly KafkaOptions _options;
+
         public KafkaOptionsTests()
         {
             _options = new KafkaOptions(new List<string> { "broker" }, "topicName");
         }
-
-        private readonly KafkaOptions _options;
 
         public static IEnumerable<object[]> BrokerTestData
         {
@@ -22,17 +22,17 @@ namespace Serilog.Sinks.Kafka.Tests.Options
             {
                 yield return new object[]
                 {
-                    new List<string> {"broker", ""}
+                    new List<string> { "broker", "" }
                 };
 
                 yield return new object[]
                 {
-                    new List<string> {null, "broker"}
+                    new List<string> { null, "broker" }
                 };
 
                 yield return new object[]
                 {
-                    new List<string> {"broker", " "}
+                    new List<string> { "broker", " " }
                 };
             }
         }

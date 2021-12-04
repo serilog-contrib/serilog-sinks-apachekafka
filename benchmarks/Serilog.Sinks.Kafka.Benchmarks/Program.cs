@@ -3,6 +3,7 @@ using BenchmarkDotNet.Environments;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Toolchains.CsProj;
+using Microsoft.Diagnostics.Tracing.Analysis;
 
 namespace Serilog.Sinks.Kafka.Benchmarks
 {
@@ -11,11 +12,13 @@ namespace Serilog.Sinks.Kafka.Benchmarks
         public static void Main(string[] args)
         {
             var config = DefaultConfig.Instance
-                .With(Job.Default.With(Runtime.Clr))
+                .AddJob(Job.Default.WithRuntime(ClrRuntime.Net472))
                 //.With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp20))
                 //.With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp21))
-                .With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp22));
-                //.With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp30))
+                .AddJob(Job.Default.WithRuntime(CoreRuntime.Core31))
+                .AddJob(Job.Default.WithRuntime(CoreRuntime.Core50))
+                .AddJob(Job.Default.WithRuntime(CoreRuntime.Core60));
+            //.With(Job.Default.With(Runtime.Core).With(CsProjCoreToolchain.NetCoreApp30))
 
             BenchmarkSwitcher
                 .FromAssembly(typeof(Program).Assembly)

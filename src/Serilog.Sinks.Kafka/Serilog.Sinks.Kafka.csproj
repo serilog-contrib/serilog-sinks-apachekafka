@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFrameworks>net461;netstandard2.0;netstandard2.1</TargetFrameworks>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <Copyright>Copyright (c) 2021 - Present</Copyright>
         <IsPackable>true</IsPackable>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -10,18 +11,19 @@
         <PackageId>Serilog.Sinks.ApacheKafka</PackageId>
         <Authors>Vadim Hatsura</Authors>
         <PackageTags>serilog;logging;sink;kafka;apache</PackageTags>
-        <PackageIconUrl>http://serilog.net/images/serilog-sink-nuget.png</PackageIconUrl>
+        <PackageIconUrl>https://cdn.jsdelivr.net/gh/serilog-contrib/brand/logo/sink/serilog-sink-nuget.png</PackageIconUrl>
         <PackageProjectUrl>https://github.com/vhatsura/serilog-sinks-kafka</PackageProjectUrl>
-        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <RepositoryUrl>https://github.com/vhatsura/serilog-sinks-kafka.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <RepositoryType>git</RepositoryType>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Confluent.Kafka" Version="1.8.2" />
         <PackageReference Include="GitVersion.MsBuild" Version="5.8.1">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" />
         <PackageReference Include="Serilog" Version="2.10.0" />

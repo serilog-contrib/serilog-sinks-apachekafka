@@ -1,16 +1,21 @@
 # Kafka sink for Serilog
 
-[![Build Status](https://dev.azure.com/vadimhatsura/serilog-sinks-kafka/_apis/build/status/vhatsura.serilog-sinks-kafka?branchName=master)](https://dev.azure.com/vadimhatsura/serilog-sinks-kafka/_build/latest?definitionId=4&branchName=master)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=serilog-sinks-kafka&metric=alert_status)](https://sonarcloud.io/dashboard?id=serilog-sinks-kafka)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=serilog-sinks-kafka&metric=coverage)](https://sonarcloud.io/dashboard?id=serilog-sinks-kafka)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=serilog-sinks-kafka&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=serilog-sinks-kafka)
-[![MyGet (with prereleases)](https://img.shields.io/myget/serilog-sinks-kafka/vpre/Serilog.Sinks.ApacheKafka)](https://www.myget.org/feed/serilog-sinks-kafka/package/nuget/Serilog.Sinks.ApacheKafka)
-
 A sink for [Serilog](https://serilog.net/) that writes events to [Kafka](https://kafka.apache.org/) with failover functionality.
 
 ## Installation
 
+```powershell
+Install-Package Serilog.Sinks.ApacheKafka
+```
+
 ## Usage
+
+```csharp
+var loggerConfig = new LoggerConfiguration()
+    .WriteTo.Kafka(
+        new JsonFormatter(),
+        new KafkaOptions(new List<string> { "kafka:9092" }, "topic"));
+```
 
 ## Roadmap
 

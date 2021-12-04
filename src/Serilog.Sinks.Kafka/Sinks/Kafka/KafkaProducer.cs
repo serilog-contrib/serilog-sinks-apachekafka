@@ -27,12 +27,12 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
                 SocketKeepaliveEnable = true,
                 SocketNagleDisable = true,
 
-                MessageTimeoutMs = (int) producerOptions.MessageTimeout.TotalMilliseconds,
+                MessageTimeoutMs = (int)producerOptions.MessageTimeout.TotalMilliseconds,
                 QueueBufferingMaxMessages = producerOptions.MaxMessagesInBufferingQueue,
                 BatchNumMessages = producerOptions.MessageBatchSize,
 
                 MessageSendMaxRetries = producerOptions.RetryCount,
-                RetryBackoffMs = (int) producerOptions.RetryAfter.TotalMilliseconds,
+                RetryBackoffMs = (int)producerOptions.RetryAfter.TotalMilliseconds,
 
                 LogConnectionClose = false,
 
@@ -71,7 +71,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
         {
             if (_disposed) throw new ObjectDisposedException(nameof(KafkaProducer));
 
-            return Producer.ProduceAsync(_topicName, new Message<Null, string> {Value = message});
+            return Producer.ProduceAsync(_topicName, new Message<Null, string> { Value = message });
         }
 
         private void ProducerOnError(Error error)

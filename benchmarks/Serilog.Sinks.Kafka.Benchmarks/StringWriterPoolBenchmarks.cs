@@ -9,7 +9,7 @@ namespace Serilog.Sinks.Kafka.Benchmarks
     {
         [Params(1, 10)]
         public int Amount;
-        
+
         public int CharactersLimit = 5000;
 
         // [Params(500, 1500, 2500)]

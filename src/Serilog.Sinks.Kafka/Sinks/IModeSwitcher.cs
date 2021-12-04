@@ -8,7 +8,7 @@ namespace Serilog.Sinks.Kafka.Sinks
         Mode CurrentMode { get; }
 
         void SwitchToFallback(Exception exceptionReason);
-        
+
         void SwitchToFallback(Error reason);
     }
 }

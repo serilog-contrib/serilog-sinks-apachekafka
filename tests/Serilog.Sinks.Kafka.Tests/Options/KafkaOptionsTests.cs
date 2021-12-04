@@ -11,7 +11,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
     {
         public KafkaOptionsTests()
         {
-            _options = new KafkaOptions(new List<string> {"broker"}, "topicName");
+            _options = new KafkaOptions(new List<string> { "broker" }, "topicName");
         }
 
         private readonly KafkaOptions _options;
@@ -59,7 +59,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         public void BrokersSetter_ShouldNotThrowsException_WhenAllValuesAreNotEmptyAndWhiteSpace()
         {
             // Arrange
-            var brokers = new List<string> {"broker1", "broker2"};
+            var brokers = new List<string> { "broker1", "broker2" };
 
             // Act
             _options.Brokers = brokers;

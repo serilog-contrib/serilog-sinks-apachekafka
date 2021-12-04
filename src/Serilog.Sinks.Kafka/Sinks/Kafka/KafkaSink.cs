@@ -70,7 +70,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
             return Task.WhenAll(events.Select(async e =>
             {
                 await semaphore.WaitAsync();
-                
+
                 try
                 {
                     using (var writerHolder = _stringWriterPool.Get())
@@ -91,7 +91,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
             base.Dispose(disposing);
 
             if (!disposing || _producer == null) return;
-            
+
             _producer.Flush();
             _producer.Dispose();
         }

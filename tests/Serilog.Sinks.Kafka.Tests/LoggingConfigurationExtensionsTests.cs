@@ -21,7 +21,7 @@ namespace Serilog.Sinks.Kafka.Tests
             // Arrange
             var sinkConfiguration = new LoggerConfiguration().WriteTo;
             var formatter = new JsonFormatter();
-            var kafkaOptions = new KafkaOptions(new List<string> {"broker"}, "topicName");
+            var kafkaOptions = new KafkaOptions(new List<string> { "broker" }, "topicName");
             var fallbackSink = Mock.Of<ILogEventSink>();
 
             // Act + Assert
@@ -35,7 +35,7 @@ namespace Serilog.Sinks.Kafka.Tests
             // Arrange
             var sinkConfiguration = new LoggerConfiguration().WriteTo;
             var formatter = new JsonFormatter();
-            var kafkaOptions = new KafkaOptions(new List<string> {"broker"}, "topicName");
+            var kafkaOptions = new KafkaOptions(new List<string> { "broker" }, "topicName");
             var fallbackSink = Mock.Of<ILogEventSink>();
             var fallbackTime = TimeSpan.FromMinutes(1);
 
@@ -52,7 +52,7 @@ namespace Serilog.Sinks.Kafka.Tests
             // Arrange
             var sinkConfiguration = new LoggerConfiguration().WriteTo;
             var formatter = new JsonFormatter();
-            var kafkaOptions = new KafkaOptions(new List<string> {"broker"}, "topicName");
+            var kafkaOptions = new KafkaOptions(new List<string> { "broker" }, "topicName");
 
             // Act + Assert
             Assert.Throws<ArgumentNullException>("batch",
@@ -65,7 +65,7 @@ namespace Serilog.Sinks.Kafka.Tests
             // Arrange
             var sinkConfiguration = new LoggerConfiguration().WriteTo;
             var formatter = new JsonFormatter();
-            var kafkaOptions = new KafkaOptions(new List<string> {"broker"}, "topicName");
+            var kafkaOptions = new KafkaOptions(new List<string> { "broker" }, "topicName");
 
             // Act + Assert
             Assert.Throws<ArgumentNullException>("fallback",
@@ -100,7 +100,7 @@ namespace Serilog.Sinks.Kafka.Tests
         {
             // Arrange + Act + Assert
             Assert.Throws<ArgumentNullException>("sinkConfiguration",
-                () => ((LoggerSinkConfiguration) null).Kafka(null, null, null, TimeSpan.Zero));
+                () => ((LoggerSinkConfiguration)null).Kafka(null, null, null, TimeSpan.Zero));
         }
 
         [Fact]
@@ -109,7 +109,7 @@ namespace Serilog.Sinks.Kafka.Tests
             // Arrange
             var sinkConfiguration = new LoggerConfiguration().WriteTo;
             var formatter = new JsonFormatter();
-            var kafkaOptions = new KafkaOptions(new List<string> {"broker"}, "topicName");
+            var kafkaOptions = new KafkaOptions(new List<string> { "broker" }, "topicName");
             var batchOptions = new BatchOptions();
 
             // Act
@@ -125,7 +125,7 @@ namespace Serilog.Sinks.Kafka.Tests
             // Arrange
             var sinkConfiguration = new LoggerConfiguration().WriteTo;
             var formatter = new JsonFormatter();
-            var kafkaOptions = new KafkaOptions(new List<string> {"broker"}, "topicName");
+            var kafkaOptions = new KafkaOptions(new List<string> { "broker" }, "topicName");
 
             // Act + Assert
             Assert.Throws<ArgumentNullException>("batch",
@@ -160,7 +160,7 @@ namespace Serilog.Sinks.Kafka.Tests
         {
             // Arrange + Act + Assert
             Assert.Throws<ArgumentNullException>("sinkConfiguration",
-                () => ((LoggerSinkConfiguration) null).Kafka(null, null));
+                () => ((LoggerSinkConfiguration)null).Kafka(null, null));
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Serilog.Sinks.Kafka.Benchmarks.Sinks
         [GlobalSetup]
         public void Setup()
         {
-            _sink = new KafkaSink(new JsonFormatter(), new MockKafkaProducer(), new StringWriterPoolOptions{ Amount = Amount});
+            _sink = new KafkaSink(new JsonFormatter(), new MockKafkaProducer(), new StringWriterPoolOptions { Amount = Amount });
 
             _events = Enumerable.Range(0, N)
                 .Select(x => new LogEvent(DateTimeOffset.UtcNow, LogEventLevel.Information, null,

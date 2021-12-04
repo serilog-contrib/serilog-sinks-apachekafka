@@ -166,7 +166,7 @@ namespace Serilog.Sinks.Kafka.Tests.Options
         }
 
         [Theory]
-        [InlineData((CompressionType) 10)]
+        [InlineData((CompressionType)10)]
         public void CompressionType_ShouldThrowsException_WhenValueIsNotDefineInEnum(CompressionType value)
         {
             // Arrange

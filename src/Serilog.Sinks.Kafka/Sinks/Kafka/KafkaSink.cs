@@ -21,12 +21,12 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
 
         // used for mock purposes only
         [Obsolete("Must not be used directly. Only for mock purposes in unit tests")]
-        internal KafkaSink() : base(0, TimeSpan.Zero)
+        internal KafkaSink() : base(1, TimeSpan.FromSeconds(1))
         {
         }
 
         [Obsolete("Must not be used directly. Only for benchmarks")]
-        internal KafkaSink(ITextFormatter formatter, IKafkaProducer producer, StringWriterPoolOptions options) : base(0, TimeSpan.Zero)
+        internal KafkaSink(ITextFormatter formatter, IKafkaProducer producer, StringWriterPoolOptions options) : this()
         {
             _formatter = formatter;
             _producer = producer;
@@ -70,7 +70,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
             return Task.WhenAll(events.Select(async e =>
             {
                 await semaphore.WaitAsync();
-                
+
                 try
                 {
                     using (var writerHolder = _stringWriterPool.Get())
@@ -91,7 +91,7 @@ namespace Serilog.Sinks.Kafka.Sinks.Kafka
             base.Dispose(disposing);
 
             if (!disposing || _producer == null) return;
-            
+
             _producer.Flush();
             _producer.Dispose();
         }

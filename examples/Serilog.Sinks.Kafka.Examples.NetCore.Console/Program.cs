@@ -14,7 +14,7 @@ namespace Serilog.Sinks.Kafka.Examples.NetCore.Console
         {
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Kafka(
-                    new JsonFormatter(), new KafkaOptions(new List<string> {"kafka:9092"}, "console-example"),
+                    new JsonFormatter(), new KafkaOptions(new List<string> { "kafka:9092" }, "console-example"),
                     new BatchOptions())
                 .Enrich.FromLogContext()
                 .CreateLogger();

@@ -33,13 +33,13 @@ jobs:
         run: dotnet pack --configuration Release --no-build --include-symbols --output ./nupkgs
 
       - name: Archive NuGet artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: nuget-packages
           path: ./nupkgs/*.nupkg
 
       - name: Archive NuGet symbols artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: nuget-symbol-packages
           path: ./nupkgs/*.snupkg
